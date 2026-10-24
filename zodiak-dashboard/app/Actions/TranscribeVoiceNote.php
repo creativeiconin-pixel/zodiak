@@ -19,11 +19,11 @@ class TranscribeVoiceNote
         'kn' => 'They usually speak Kannada; write it in Kannada script.',
     ];
 
-    public function __construct(private GeminiClient $gemini) {}
+    public function __construct(private GeminiClient $gemini, private AgentSwitchboard $agents) {}
 
     public function isAvailable(): bool
     {
-        return $this->gemini->isConfigured();
+        return $this->gemini->isConfigured() && ! $this->agents->isPaused('listener');
     }
 
     public function handle(UploadedFile $audio, string $locale): ?string

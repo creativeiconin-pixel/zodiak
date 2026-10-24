@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use Anthropic\Core\Exceptions\APIException;
+use App\Actions\AgentSwitchboard;
 use App\Actions\CreditWallet;
 use App\Actions\PreparePalmPhoto;
 use App\Actions\ReadPalm;
@@ -47,7 +48,7 @@ class PalmReadingController extends Controller
      * Read a palm photo. The photo is only held in memory for this request and is never stored;
      * only the AI's structured reading is saved.
      */
-    public function store(StorePalmReadingRequest $request, ReadPalm $readPalm, PreparePalmPhoto $preparePhoto, CreditWallet $wallet): JsonResponse
+    public function store(StorePalmReadingRequest $request, ReadPalm $readPalm, PreparePalmPhoto $preparePhoto, CreditWallet $wallet, AgentSwitchboard $agents): JsonResponse
     {
         /** @var Seeker $seeker */
         $seeker = $request->user();
@@ -55,6 +56,10 @@ class PalmReadingController extends Controller
 
         if (! $readPalm->isConfigured()) {
             return response()->json(['message' => __('The AI palm reader is not switched on yet. Please try again later.')], 503);
+        }
+
+        if ($agents->isPaused('palm')) {
+            return response()->json(['message' => __('The palm reader is resting right now. Please try again a little later.'), 'code' => 'agent_paused'], 503);
         }
 
         $upload = $request->file('image');

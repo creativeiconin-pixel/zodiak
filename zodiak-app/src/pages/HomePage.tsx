@@ -8,6 +8,7 @@ import type { Chart } from "../lib/astro";
 import { useBirthProfile } from "../lib/birthProfile";
 import { SignInCard } from "../components/RequireSignIn";
 import { useSession } from "../lib/session";
+import { ZodiacWheel } from "../components/motion/ZodiacWheel";
 import { qualityOf, readDay } from "../lib/transits";
 
 const FILL = { fontVariationSettings: "'FILL' 1" } as const;
@@ -112,34 +113,9 @@ export default function HomePage() {
             </span>
             <span className="font-label-sm text-label-sm tracking-wider uppercase text-primary font-semibold">{t.heroPill}</span>
           </div>
-          {/* Astrolabe emblem */}
-          <div className="animate-scale-in [animation-delay:100ms] [animation-duration:900ms] relative z-10 w-44 h-44 mb-space-md flex items-center justify-center">
-            <svg className="absolute inset-0 w-full h-full text-primary/40 animate-[spin_60s_linear_infinite]" fill="none" viewBox="0 0 200 200">
-              <circle cx="100" cy="100" r="95" stroke="currentColor" strokeDasharray="3 3" strokeWidth="0.75" />
-              <circle cx="100" cy="100" r="86" stroke="currentColor" strokeWidth="0.5" />
-              <circle cx="100" cy="100" r="70" stroke="currentColor" strokeOpacity="0.6" strokeWidth="0.75" />
-              <line stroke="currentColor" strokeWidth="1.5" x1="100" x2="100" y1="5" y2="15" />
-              <line stroke="currentColor" strokeWidth="1.5" x1="100" x2="100" y1="185" y2="195" />
-              <line stroke="currentColor" strokeWidth="1.5" x1="5" x2="15" y1="100" y2="100" />
-              <line stroke="currentColor" strokeWidth="1.5" x1="185" x2="195" y1="100" y2="100" />
-              <circle cx="100" cy="20" fill="#f2ca50" r="1.5" />
-              <circle cx="160" cy="50" fill="#f2ca50" r="1.5" />
-              <circle cx="180" cy="100" fill="#f2ca50" r="1.5" />
-              <circle cx="150" cy="160" fill="#d0bcff" r="1.2" />
-              <circle cx="40" cy="150" fill="#f2ca50" r="1.5" />
-              <circle cx="20" cy="100" fill="#d0bcff" r="1.2" />
-              <circle cx="50" cy="40" fill="#f2ca50" r="1.5" />
-            </svg>
-            <div className="relative w-32 h-32 rounded-full bg-gradient-to-tr from-surface-container-high/90 via-surface-container/80 to-surface-container-high/90 shadow-[0_0_28px_rgba(242,202,80,0.22)] backdrop-blur-md flex items-center justify-center">
-              <span aria-hidden className="motion-decor absolute inset-0 rounded-full shadow-[0_0_44px_rgba(242,202,80,0.35)] animate-twinkle [animation-duration:3.5s]" />
-              <div className="relative flex items-center justify-center">
-                <span className="material-symbols-outlined text-primary text-5xl animate-[spin_24s_linear_infinite]" style={FILL}>
-                  flare
-                </span>
-                <span className="material-symbols-outlined text-secondary absolute -top-2 -right-2 text-xl animate-twinkle">auto_awesome</span>
-                <span className="material-symbols-outlined text-primary absolute -bottom-1 -left-2 text-base animate-twinkle [animation-delay:-2s]">brightness_empty</span>
-              </div>
-            </div>
+          {/* Zodiac wheel: the 12 signs turning, planets circling the sun */}
+          <div className="animate-scale-in [animation-delay:100ms] [animation-duration:900ms] relative z-10 mb-space-md">
+            <ZodiacWheel className="w-56 h-56" />
           </div>
           <h1 className="animate-rise [animation-delay:200ms] relative z-10 font-headline-lg-mobile text-headline-lg-mobile font-semibold text-on-surface tracking-tight max-w-xs">
             {t.heroTitle}

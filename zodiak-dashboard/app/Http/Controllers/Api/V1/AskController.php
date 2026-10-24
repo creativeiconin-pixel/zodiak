@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use Anthropic\Core\Exceptions\APIException;
+use App\Actions\AgentSwitchboard;
 use App\Actions\AskClaude;
 use App\Actions\CheckRemedySuggestion;
 use App\Actions\CreditWallet;
@@ -55,13 +56,17 @@ class AskController extends Controller
     /**
      * Answer a question about the seeker's chart.
      */
-    public function store(StoreQuestionRequest $request, AskClaude $askClaude, DetectCrisisMessage $detectCrisis, RecordAuditLog $recordAuditLog, SynthesizeVoiceReply $synthesizeVoiceReply, CreditWallet $wallet, TranscribeVoiceNote $transcribe, CheckRemedySuggestion $checkSuggestion): JsonResponse
+    public function store(StoreQuestionRequest $request, AskClaude $askClaude, DetectCrisisMessage $detectCrisis, RecordAuditLog $recordAuditLog, SynthesizeVoiceReply $synthesizeVoiceReply, CreditWallet $wallet, TranscribeVoiceNote $transcribe, CheckRemedySuggestion $checkSuggestion, AgentSwitchboard $agents): JsonResponse
     {
         /** @var Seeker $seeker */
         $seeker = $request->user();
         $question = trim((string) $request->validated('message'));
 
         if ($question === '' && $request->hasFile('audio')) {
+            if ($agents->isPaused('listener')) {
+                return response()->json(['message' => __('Voice notes are paused right now. Please type your question.'), 'code' => 'agent_paused'], 503);
+            }
+
             $question = (string) $transcribe->handle($request->file('audio'), app()->getLocale());
 
             if ($question === '') {
@@ -82,6 +87,11 @@ class AskController extends Controller
         } else {
             if (! $askClaude->isConfigured()) {
                 return response()->json(['message' => __('Pandit Jii is not available yet. Please try again later.')], 503);
+            }
+
+            // Paused from the Op-Center Agents page: turn the question away before any credit is taken
+            if ($agents->isPaused('pandit')) {
+                return response()->json(['message' => __('Pandit Jii is resting right now. Please try again a little later.'), 'code' => 'agent_paused'], 503);
             }
 
             $cost = $wallet->questionCost();

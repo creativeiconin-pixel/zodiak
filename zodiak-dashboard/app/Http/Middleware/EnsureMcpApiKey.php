@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Actions\AgentSwitchboard;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +16,10 @@ class EnsureMcpApiKey
     public function handle(Request $request, Closure $next): Response
     {
         $key = (string) config('services.mcp.key');
+
+        if (app(AgentSwitchboard::class)->isPaused('mcp')) {
+            return response()->json(['message' => 'MCP access is paused from the Op-Center Agents page.'], 503);
+        }
 
         if ($key === '') {
             return response()->json(['message' => 'MCP access is turned off. Set an MCP API key in Integrations.'], 503);

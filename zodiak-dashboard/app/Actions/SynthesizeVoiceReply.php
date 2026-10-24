@@ -25,7 +25,7 @@ class SynthesizeVoiceReply
 
     public function isConfigured(): bool
     {
-        return filled(config('services.elevenlabs.key')) && filled(config('services.elevenlabs.voice_id'));
+        return filled(config('services.elevenlabs.key')) && filled(config('services.elevenlabs.voice_id')) && ! app(AgentSwitchboard::class)->isPaused('voice');
     }
 
     /**

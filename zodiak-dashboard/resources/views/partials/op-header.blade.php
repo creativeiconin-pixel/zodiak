@@ -5,6 +5,8 @@
     $dashboard = route('dashboard');
     $payments = route('payments.index');
     $statusFilter = request()->routeIs('orders.index') ? request('status') : null;
+    $switchboard = app(\App\Actions\AgentSwitchboard::class);
+    $pausedAgents = collect(array_keys(\App\Actions\AgentSwitchboard::AGENTS))->filter(fn (string $slug) => $switchboard->isPaused($slug))->count();
     $integrationNames = [
         'gemini' => 'Gemini AI', 'anthropic' => 'Claude AI', 'agenticorg' => 'AgenticOrg', 'credits' => 'Credits & packs', 'mcp' => 'MCP server',
         'upi' => 'UPI payments', 'elevenlabs' => 'Voice replies', 'pinelabs' => 'Pine Labs', 'msg91' => 'Phone OTP',
@@ -27,6 +29,7 @@
                 ['label' => 'Blessing & shipping', 'url' => $dashboard.'#dispatch', 'count' => $count('dispatch'), 'active' => false],
                 ['label' => 'Activity log', 'url' => $dashboard.'#audit-log', 'active' => false],
             ]],
+            ['label' => 'Agents', 'icon' => 'smart_toy', 'url' => route('agents.index'), 'active' => request()->routeIs('agents.*'), 'count' => $pausedAgents, 'title' => $pausedAgents.' paused '.Str::plural('agent', $pausedAgents)],
             ['label' => 'Payments', 'icon' => 'payments', 'url' => $payments, 'active' => request()->routeIs('payments.*'), 'count' => $paymentsToCheck ?? 0, 'title' => ($paymentsToCheck ?? 0).' UTR '.Str::plural('payment', $paymentsToCheck ?? 0).' to check', 'children' => [
                 ['label' => 'UTRs to check', 'url' => $payments.'#utrs', 'count' => $count('utrs'), 'urgent' => true, 'active' => false],
                 ['label' => 'Credit recharges', 'url' => $payments.'#recharges', 'count' => $count('recharges'), 'urgent' => true, 'active' => false],

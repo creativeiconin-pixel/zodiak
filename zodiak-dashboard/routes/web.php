@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminCreditRechargeController;
 use App\Http\Controllers\AdminOrderController;
+use App\Http\Controllers\AgentController;
 use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\ChatReviewController;
 use App\Http\Controllers\CreditRechargeVerificationController;
@@ -41,6 +42,8 @@ Route::prefix('admin')->group(function () {
         Route::post('logout', [SessionController::class, 'destroy'])->name('logout');
 
         Route::get('overview', OverviewController::class)->name('overview');
+        Route::get('agents', [AgentController::class, 'index'])->name('agents.index');
+        Route::put('agents/{agent}', [AgentController::class, 'update'])->name('agents.update');
         Route::get('dashboard', DashboardController::class)->name('dashboard');
         Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
         Route::get('orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
