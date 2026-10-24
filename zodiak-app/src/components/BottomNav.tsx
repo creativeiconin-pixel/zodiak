@@ -1,4 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
+import { PanditAvatar } from "./chat/PanditAvatar";
 import { useT } from "../i18n";
 import { common } from "../i18n/common";
 import { useDesktopLanding } from "../lib/useDesktopLanding";
@@ -28,7 +29,7 @@ export function BottomNav() {
         {TABS.map((tab) => {
           const active = tab.match(pathname);
           if (tab.href === "/ask") {
-            // The centre "Ask AI" orb is always raised, regardless of active state
+            // The centre Pandit Jii button (same face as in the chat) is always raised
             return (
               <Link
                 key={tab.href}
@@ -37,10 +38,13 @@ export function BottomNav() {
                 className="tap-scale flex flex-col items-center justify-center min-w-[44px] min-h-[44px] w-16 -mt-4 py-space-xs text-on-surface-variant group transition-colors duration-300 hover:text-on-surface"
               >
                 <div
-                  className={`relative w-12 h-12 rounded-full transition-transform duration-300 ease-out-expo bg-gradient-to-tr from-secondary-container via-surface-container-high to-primary flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)] ring-1 ${active ? "ring-primary scale-105" : "ring-primary/30"}`}
+                  className={`relative w-12 h-12 rounded-full transition-transform duration-300 ease-out-expo shadow-[0_0_20px_rgba(212,175,55,0.4)] ring-2 ${active ? "ring-primary scale-105" : "ring-primary/40"}`}
                 >
                   <span aria-hidden className="motion-decor absolute -inset-1.5 -z-10 rounded-full bg-primary/25 blur-md animate-glow" />
-                  <span key={active ? "on" : "off"} className={`material-symbols-outlined text-on-primary text-2xl group-hover:scale-110 transition-transform ${active ? "animate-icon-bounce" : ""}`}>{tab.icon}</span>
+                  <PanditAvatar
+                    key={active ? "on" : "off"}
+                    className={`w-12 h-12 group-hover:scale-110 transition-transform ${active ? "animate-icon-bounce" : ""}`}
+                  />
                 </div>
                 <span className="font-label-sm text-label-sm tracking-tight mt-1 text-primary-fixed">{t.nav[tab.key]}</span>
               </Link>
