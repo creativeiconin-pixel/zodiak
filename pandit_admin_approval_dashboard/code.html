@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: 'class', theme: { extend: { colors: { 'on-background': '#e1e1f5', 'on-primary': '#3c2f00', 'on-surface': '#e1e1f5', 'inverse-on-surface': '#2e2f3f', 'secondary-fixed-dim': '#d0bcff', 'outline-variant': '#4d4635', 'surface-tint': '#e9c349', 'error': '#ffb4ab', 'surface-bright': '#363848', 'surface-container-high': '#272938', 'on-secondary': '#3c0091', 'surface-container': '#1d1f2d', 'on-tertiary': '#372950', 'on-primary-container': '#554300', 'primary': '#f2ca50', 'background': '#101221', 'surface-dim': '#101221', 'primary-container': '#d4af37', 'on-surface-variant': '#d0c5af', 'inverse-primary': '#735c00', 'on-error-container': '#ffdad6', 'secondary': '#d0bcff', 'on-secondary-fixed-variant': '#5516be', 'surface': '#101221', 'tertiary': '#d9c6f7', 'on-secondary-container': '#c4abff', 'outline': '#99907c', 'tertiary-fixed-dim': '#d1beef', 'on-error': '#690005', 'surface-container-highest': '#323443', 'surface-variant': '#323443', 'error-container': '#93000a', 'surface-container-low': '#191b29', 'secondary-fixed': '#e9ddff', 'on-tertiary-container': '#4c3e66', 'on-tertiary-fixed-variant': '#4e4068', 'surface-container-lowest': '#0b0d1b', 'on-primary-fixed-variant': '#574500', 'secondary-container': '#571bc1', 'primary-fixed-dim': '#e9c349', 'primary-fixed': '#ffe088', 'on-primary-fixed': '#241a00', 'tertiary-container': '#bdabda', 'inverse-surface': '#e1e1f5', 'on-secondary-fixed': '#23005c', 'on-tertiary-fixed': '#22143a', 'tertiary-fixed': '#ebdcff' }, borderRadius: { 'DEFAULT': '0.25rem', 'lg': '0.5rem', 'xl': '0.75rem', 'full': '9999px' }, spacing: { 'space-lg': '1.5rem', 'margin-mobile': '1rem', 'space-md': '1rem', 'gutter-mobile': '0.75rem', 'space-xs': '0.25rem', 'space-xl': '2.5rem', 'margin': '2rem', 'gutter': '1.25rem', 'space-sm': '0.5rem' }, fontFamily: { 'display-lg': ['Playfair Display'], 'title-md': ['Plus Jakarta Sans'], 'body-sm': ['Plus Jakarta Sans'], 'display-lg-mobile': ['Playfair Display'], 'body-md': ['Plus Jakarta Sans'], 'headline-sm': ['Playfair Display'], 'headline-lg-mobile': ['Playfair Display'], 'label-sm': ['Plus Jakarta Sans'], 'title-lg': ['Plus Jakarta Sans'], 'label-lg': ['Plus Jakarta Sans'], 'headline-lg': ['Playfair Display'], 'headline-md': ['Playfair Display'], 'label-md': ['Plus Jakarta Sans'], 'body-lg': ['Plus Jakarta Sans'] }, fontSize: { 'display-lg': ['48px', { lineHeight: '56px', letterSpacing: '-0.02em', fontWeight: '600' }], 'title-md': ['16px', { lineHeight: '24px', fontWeight: '600' }], 'body-sm': ['12px', { lineHeight: '18px', fontWeight: '400' }], 'display-lg-mobile': ['36px', { lineHeight: '44px', letterSpacing: '-0.01em', fontWeight: '600' }], 'body-md': ['14px', { lineHeight: '22px', fontWeight: '400' }], 'headline-sm': ['20px', { lineHeight: '28px', fontWeight: '500' }], 'headline-lg-mobile': ['26px', { lineHeight: '34px', letterSpacing: '0em', fontWeight: '600' }], 'label-sm': ['10px', { lineHeight: '14px', letterSpacing: '0.08em', fontWeight: '600' }], 'title-lg': ['18px', { lineHeight: '26px', fontWeight: '600' }], 'label-lg': ['14px', { lineHeight: '20px', letterSpacing: '0.02em', fontWeight: '600' }], 'headline-lg': ['32px', { lineHeight: '40px', letterSpacing: '-0.01em', fontWeight: '600' }], 'headline-md': ['24px', { lineHeight: '32px', fontWeight: '500' }], 'label-md': ['12px', { lineHeight: '16px', letterSpacing: '0.04em', fontWeight: '500' }], 'body-lg': ['16px', { lineHeight: '26px', fontWeight: '400' }] } } } };</script></head><body class="bg-surface font-body-md text-on-surface min-h-screen"><aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-lowest z-50 flex flex-col pt-4 pb-6 shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="px-space-lg pb-space-md mb-space-md flex items-center gap-space-sm"><div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div><span class="font-label-sm text-label-sm uppercase tracking-widest text-outline">Operational Nodes</span></div><nav class="flex-1 px-space-md space-y-space-xs" data-active-classes="bg-primary-container text-on-primary-container font-semibold rounded-xl shadow-[0_0_16px_rgba(212,175,55,0.25)]"><a aria-current="page" class="flex items-center justify-between px-space-md py-space-sm transition-all group bg-primary-container text-on-primary-container font-semibold rounded-xl shadow-[0_0_16px_rgba(212,175,55,0.25)]" data-path="pending-gemstone-approvals" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-xl">diamond</span><span class="font-title-md text-body-md font-medium">Pending Gemstones</span></div><span class="px-2 py-0.5 rounded-full bg-primary/20 text-primary font-label-sm text-label-sm font-semibold">8</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group" data-path="flagged-sensitive-chats" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-outline group-hover:text-error transition-colors text-xl">crisis_alert</span><span class="font-title-md text-body-md font-medium">Sensitive Chats</span></div><span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-semibold">3</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group" data-path="refund-and-dispute-queue" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-outline group-hover:text-secondary transition-colors text-xl">currency_exchange</span><span class="font-title-md text-body-md font-medium">Refund &amp; Dispute</span></div><span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-secondary font-label-sm text-label-sm font-semibold">2</span></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group" data-path="consecration-dispatch" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-xl">local_shipping</span><span class="font-title-md text-body-md font-medium">Consecration Dispatch</span></div></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group" data-path="astrologer-audit-log" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-xl">fact_check</span><span class="font-title-md text-body-md font-medium">Astrologer Audit Log</span></div></a><a class="flex items-center justify-between px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group" data-path="analytics" href="#"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-xl">insights</span><span class="font-title-md text-body-md font-medium">Analytics</span></div></a></nav><div class="px-space-md mt-auto pt-space-md"><div class="p-space-md rounded-xl bg-surface-container-low shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center gap-space-xs text-primary mb-1"><span class="material-symbols-outlined text-base">verified</span><span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold">Vedic Registry</span></div><p class="font-body-sm text-body-sm text-outline">Lahiri Ayanamsa (24°10'33") algorithmically validated for current planetary cycle.</p></div></div></aside><div class="pl-72 flex flex-col min-h-screen"><header class="fixed top-0 left-72 right-0 h-16 bg-surface-container-lowest/80 backdrop-blur-xl z-40 shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-16 w-full px-space-lg flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-sm"><img alt="Zodiak Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDodMezVCSxaEHZRmStyxW2qvsM_gsgHdylaq02Wr9leTxC6pC4NZp_kG-s2yp9c6fUAy_YsvAeYoz86ptIjfG_-muExS1M3AlSLszjUh0DqGmHhTbfJ7BAUF_rcQJKNwLwFAOUCTzUV-yNhA06fFCTKjEL4Urvn1QlunOyA-aCkrQnFuKQunqByZxkTWZHLqkuIO10VvV6PRcWr-L0sGQz6gqsZZJCuDSWmVjCGU-z"/><span class="font-title-lg text-title-lg tracking-wider font-bold text-on-surface">ZODIAK OP-CENTER</span></div><div class="h-4 w-px bg-outline-variant/40 mx-space-xs"></div><div class="relative w-72 lg:w-96"><span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">search</span><input class="w-full pl-9 pr-4 py-1.5 rounded-lg bg-surface-container text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:ring-1 focus:ring-secondary/50 font-body-md transition-all" placeholder="Search kundli, order token, pandit ID..." type="text"/></div></div><div class="flex items-center gap-space-md"><div class="flex items-center gap-space-xs px-3 py-1.5 rounded-full bg-surface-container-high shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="w-2 h-2 rounded-full bg-surface-tint animate-pulse"></div><span class="font-label-sm text-label-sm uppercase tracking-wide text-on-surface font-semibold">Live Ephemeris: Synced</span><span class="font-label-sm text-label-sm text-outline-variant">• 0.04s</span></div><button aria-label="Notifications" class="relative p-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-xl">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-error ring-2 ring-surface-container-lowest"></span></button><div class="h-4 w-px bg-outline-variant/40"></div><div class="flex items-center gap-space-sm pl-space-xs"><div class="flex flex-col text-right"><span class="font-label-lg text-label-lg font-semibold text-on-surface leading-tight">Acharya Sharma</span><span class="font-label-sm text-label-sm text-primary uppercase font-medium">Senior Pandit</span></div><img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-primary/40" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBO6jsIQZLuzTlG0TKgXIfaUiNYmAGjCyU04R2wyrDKXCk9Pc0OZy0IoV3Gmd8UYte4ty8odGWRXAyJkUyFPHUC_IVk4AJwIPB6IV19XzxFCa06YC1uNzJjqoC4nTUr3oupvNduJTU3CCf8InOHBIn3aLGs94jU1udSeWGa9PGffJix2vrSE7VHA9G5UblIfHhL-1spapXGmGmAPRBmZlCFjYDblDa-U8uOcfBZxZKR"/></div></div></div></header><main class="w-full pt-16 bg-surface min-h-[calc(100vh-4rem)] flex-1"><div class="flex flex-col w-full">
+<!-- Subtle ambient cosmic aura contained at top -->
+<div class="relative w-full overflow-hidden px-space-lg py-space-xl">
+<div class="absolute -top-32 left-1/4 w-96 h-96 bg-secondary-container/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute top-10 right-1/4 w-80 h-80 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+<!-- Header Section -->
+<div class="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-space-md mb-space-xl">
+<div class="space-y-space-xs max-w-3xl">
+<div class="flex items-center gap-space-xs">
+<span class="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm uppercase tracking-widest flex items-center gap-1.5 shadow-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+            Operational Safeguard Protocol v4.2
+          </span>
+<span class="text-outline text-label-sm uppercase font-label-sm tracking-wider">Ayanamsa: Lahiri</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">
+          Remedy Verification &amp; Operational Safeguards
+        </h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+          Human-in-the-loop review for AI-prescribed gems, sensitive user disclosures, and financial reconciliation. Ensuring metaphysical integrity and algorithmic liability compliance.
+        </p>
+</div>
+<!-- Quick Action Controls -->
+<div class="flex items-center gap-space-sm self-start md:self-auto">
+<button class="flex items-center gap-space-xs px-space-md py-2.5 rounded-xl bg-surface-container-high text-on-surface text-label-lg font-label-lg shadow-md hover:bg-surface-container-highest transition-all">
+<span class="material-symbols-outlined text-lg text-outline">history</span>
+<span>Shift Logs</span>
+</button>
+<button class="flex items-center gap-space-xs px-space-md py-2.5 rounded-xl bg-gradient-to-r from-primary to-primary-container text-on-primary font-label-lg text-label-lg shadow-xl shadow-primary/20 hover:opacity-95 transition-all">
+<span class="material-symbols-outlined text-lg">batch_prediction</span>
+<span>Approve Selected (3)</span>
+</button>
+</div>
+</div>
+<!-- KPI Metric Strip (4 Cards) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter mb-space-xl">
+<!-- Card 1 -->
+<div class="relative p-space-lg rounded-xl bg-surface-container-low shadow-md overflow-hidden group">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-label-md text-label-md uppercase tracking-wider text-outline font-semibold">Pending Approvals</span>
+<div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-lg">diamond</span>
+</div>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-display-lg text-display-lg font-bold text-on-surface">8</span>
+<span class="px-2 py-0.5 rounded-full bg-primary/15 text-primary text-label-sm font-label-sm font-semibold">4 High Urgency</span>
+</div>
+<p class="mt-2 font-body-sm text-body-sm text-on-surface-variant">
+          Aligned with approaching <span class="text-primary font-semibold">Guru Pushya Muhurat</span>
+</p>
+<div class="mt-space-md w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full transition-all duration-500" style="width: 65%;"></div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="relative p-space-lg rounded-xl bg-surface-container-low shadow-md overflow-hidden group">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-label-md text-label-md uppercase tracking-wider text-outline font-semibold">Flagged AI Chats</span>
+<div class="w-8 h-8 rounded-lg bg-error-container/30 flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-lg">crisis_alert</span>
+</div>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-display-lg text-display-lg font-bold text-error">3</span>
+<span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container text-label-sm font-label-sm font-semibold">Intervention Required</span>
+</div>
+<p class="mt-2 font-body-sm text-body-sm text-on-surface-variant">
+          Medical &amp; severe distress distress filters triggered
+        </p>
+<div class="mt-space-md w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-error h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="relative p-space-lg rounded-xl bg-surface-container-low shadow-md overflow-hidden group">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-label-md text-label-md uppercase tracking-wider text-outline font-semibold">Pending Refunds</span>
+<div class="w-8 h-8 rounded-lg bg-secondary-container/40 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-lg">currency_exchange</span>
+</div>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-display-lg text-display-lg font-bold text-on-surface">₹24,800</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-secondary text-label-sm font-label-sm font-semibold">2 claims</span>
+</div>
+<p class="mt-2 font-body-sm text-body-sm text-on-surface-variant">
+          Escrow hold: Disputed planetary transit alignment
+        </p>
+<div class="mt-space-md w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full transition-all duration-500" style="width: 32%;"></div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="relative p-space-lg rounded-xl bg-surface-container-low shadow-md overflow-hidden group">
+<div class="flex items-center justify-between mb-space-sm">
+<span class="font-label-md text-label-md uppercase tracking-wider text-outline font-semibold">Pran-Pratishtha Pipeline</span>
+<div class="w-8 h-8 rounded-lg bg-surface-bright flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-lg">temple_hindu</span>
+</div>
+</div>
+<div class="flex items-baseline gap-space-sm">
+<span class="font-display-lg text-display-lg font-bold text-on-surface">14</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-primary text-label-sm font-label-sm font-semibold">Ready</span>
+</div>
+<p class="mt-2 font-body-sm text-body-sm text-on-surface-variant">
+          Batched for Ujjain &amp; Varanasi sanctification shifts
+        </p>
+<div class="mt-space-md w-full bg-surface-container-highest h-1 rounded-full overflow-hidden">
+<div class="bg-primary-container h-full rounded-full transition-all duration-500" style="width: 82%;"></div>
+</div>
+</div>
+</div>
+<!-- Section 1: Gemstone & Talisman Approval Queue -->
+<div class="mb-space-xl">
+<div class="p-space-lg rounded-2xl bg-surface-container-low shadow-xl">
+<!-- Table Toolbar -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md pb-space-lg">
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-xl">verified_user</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Gemstone &amp; Talisman Approval Queue</h2>
+</div>
+<p class="font-body-sm text-body-sm text-outline mt-1">High-value remedy prescriptions requiring verification against D1 (Rasi) &amp; D9 (Navamsha) charts.</p>
+</div>
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center bg-surface-container rounded-lg p-1 text-label-sm font-label-sm">
+<button class="px-3 py-1 rounded bg-surface-container-highest text-primary font-semibold shadow-sm">All (8)</button>
+<button class="px-3 py-1 rounded text-outline hover:text-on-surface transition-colors">Saturnian (Neelam)</button>
+<button class="px-3 py-1 rounded text-outline hover:text-on-surface transition-colors">Solar / Jovian</button>
+</div>
+<button class="p-2 rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface" title="Filter Records">
+<span class="material-symbols-outlined text-lg">filter_list</span>
+</button>
+</div>
+</div>
+<!-- Table Container -->
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container text-outline font-label-sm text-label-sm uppercase tracking-wider">
+<th class="py-3 px-space-md rounded-l-lg font-semibold">Order ID &amp; Customer</th>
+<th class="py-3 px-space-md font-semibold">Prescribed Remedy &amp; Price</th>
+<th class="py-3 px-space-md font-semibold min-w-[260px]">AI Astrologer Rationale</th>
+<th class="py-3 px-space-md font-semibold text-center">Chart Suitability</th>
+<th class="py-3 px-space-md font-semibold">Status</th>
+<th class="py-3 px-space-md rounded-r-lg font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high/40 font-body-md text-body-md text-on-surface">
+<!-- Row 1: Ceylon Yellow Sapphire -->
+<tr class="hover:bg-surface-container/60 transition-colors group">
+<td class="py-4 px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-xl">auto_awesome</span>
+</div>
+<div>
+<div class="font-title-md text-title-md text-on-surface flex items-center gap-1.5">
+<span>#ZK-89241</span>
+<span class="text-xs text-primary font-medium">• Ananya Sharma</span>
+</div>
+<div class="font-body-sm text-body-sm text-outline flex items-center gap-1.5 mt-0.5">
+<span class="px-1.5 py-0.2 rounded bg-surface-container text-on-surface-variant text-[11px]">Libra Lagna</span>
+<span>Swati Nakshatra (Pada 3)</span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-space-md">
+<div class="flex items-center gap-space-xs">
+<img class="w-9 h-9 rounded-lg object-cover shadow-sm" data-alt="A macro studio photograph of an opulent Ceylon yellow sapphire gemstone set into a handcrafted 18k yellow gold band resting on deep midnight navy crushed velvet under golden starlight illumination." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDUu53RdaXMNdYormV6UpifnDN9IAxWpI2zTO1TXb3HTQZwxBT_YdNaWLPifNkHTuVCpF_oHmaAh_vdGtoRwXVxDKxC3Bu_zoz1tyACDlrMa1TOU3nUgFsMBedrOkqYvXYaLjsZ-V4YG-UwkrhX1kCSVOtgR_MJ8-IS8rtZ1Qt8VFauXOndHqBLkfm48L0EEjrkKK_o_G5oTHj4GWc6uop4ew7Uak3lMFKG6ovnmv0X"/>
+<div>
+<div class="font-title-md text-body-md text-on-surface font-semibold">Ceylon Yellow Sapphire</div>
+<div class="font-body-sm text-body-sm text-primary font-bold">4.25 Ratti • ₹14,999</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-space-md">
+<div class="text-on-surface-variant text-body-sm leading-relaxed">
+<span class="text-secondary font-medium">Rahu Antardasha:</span> 12th house transit creating career stagnation; benefic Jupiter 9th aspect requires direct strengthening.
+                  </div>
+</td>
+<td class="py-4 px-space-md text-center">
+<div class="inline-flex flex-col items-center">
+<button class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-all font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-sm">visibility</span>
+<span>D1/D9 Chart</span>
+</button>
+<span class="text-[11px] text-primary font-semibold mt-1">94% Compatibility</span>
+</div>
+</td>
+<td class="py-4 px-space-md">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/15 text-primary font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                    Awaiting Approval
+                  </span>
+</td>
+<td class="py-4 px-space-md text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="px-3 py-1.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-semibold hover:bg-primary-fixed-dim transition-all shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-base">check_circle</span>
+<span>Approve</span>
+</button>
+<button class="px-2.5 py-1.5 rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-all font-label-md text-label-md" title="Edit Carat or Mantra">
+<span class="material-symbols-outlined text-base">tune</span>
+</button>
+<button class="px-2.5 py-1.5 rounded-lg bg-error-container/30 text-error hover:bg-error-container/60 transition-all font-label-md text-label-md" title="Reject &amp; Refund">
+<span class="material-symbols-outlined text-base">close</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Blue Sapphire Neelam (High Risk) -->
+<tr class="hover:bg-surface-container/60 transition-colors group">
+<td class="py-4 px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-error-container/20 text-error flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-xl">warning</span>
+</div>
+<div>
+<div class="font-title-md text-title-md text-on-surface flex items-center gap-1.5">
+<span>#ZK-89255</span>
+<span class="text-xs text-on-surface font-medium">• Vikramaditya Roy</span>
+</div>
+<div class="font-body-sm text-body-sm text-outline flex items-center gap-1.5 mt-0.5">
+<span class="px-1.5 py-0.2 rounded bg-surface-container text-on-surface-variant text-[11px]">Taurus Lagna</span>
+<span>Pushya Nakshatra (Pada 1)</span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-space-md">
+<div class="flex items-center gap-space-xs">
+<img class="w-9 h-9 rounded-lg object-cover shadow-sm" data-alt="A close-up studio shot of a raw, untreated royal Kashmir Blue Sapphire in an intricate platinum claw mounting on obsidian slate with deep cosmic violet backlighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8tuYjAxaIbXsFjAsxMw2wD2edQtLyuFG6ygJfddL3xr7PGBBPu830qEaPbXR-KVMEw3TvoVq6aH6M97Qke8oCETL_f58HwSumu_6dEA_O2IL9Dmk9ulm4m_P_DR7obbT8vNs-jHHeECbyGWDHPl4C_BySbwSqSZJUyp2-qRF_wMzunnarO26gp6HVakppziLVntXEj-ZOZPwjZtxqcN1N0GrCS94Y6qOfiOSCqgZ0"/>
+<div>
+<div class="font-title-md text-body-md text-on-surface font-semibold">Blue Sapphire (Neelam)</div>
+<div class="font-body-sm text-body-sm text-secondary font-bold">5.10 Ratti • ₹28,000</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-space-md">
+<div class="p-2 rounded-lg bg-error-container/20 text-on-surface-variant text-body-sm leading-relaxed">
+<span class="text-error font-semibold uppercase tracking-wider text-[11px]">Caution:</span> Saturn in 8th house aspecting Lagna. Mandatory 3-day Amethyst pillow trial test recommended before setting.
+                  </div>
+</td>
+<td class="py-4 px-space-md text-center">
+<div class="inline-flex flex-col items-center">
+<button class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container/30 text-secondary hover:bg-secondary-container/50 transition-all font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-sm">visibility</span>
+<span>D1/D9 Chart</span>
+</button>
+<span class="text-[11px] text-error font-semibold mt-1">68% Risk Threshold</span>
+</div>
+</td>
+<td class="py-4 px-space-md">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-highest text-error font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                    Special Trial Hold
+                  </span>
+</td>
+<td class="py-4 px-space-md text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-high text-on-surface font-label-md text-label-md font-semibold hover:bg-surface-container-highest transition-all shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-base text-secondary">science</span>
+<span>Order Amethyst Test</span>
+</button>
+<button class="px-2.5 py-1.5 rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-all font-label-md text-label-md" title="Edit Formulation">
+<span class="material-symbols-outlined text-base">tune</span>
+</button>
+<button class="px-2.5 py-1.5 rounded-lg bg-error-container text-on-error-container hover:opacity-90 transition-all font-label-md text-label-md" title="Reject &amp; Refund">
+<span class="material-symbols-outlined text-base">close</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Red Coral Moonga -->
+<tr class="hover:bg-surface-container/60 transition-colors group">
+<td class="py-4 px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-surface-container-high flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary text-xl">auto_awesome</span>
+</div>
+<div>
+<div class="font-title-md text-title-md text-on-surface flex items-center gap-1.5">
+<span>#ZK-89280</span>
+<span class="text-xs text-on-surface font-medium">• Priya Iyer</span>
+</div>
+<div class="font-body-sm text-body-sm text-outline flex items-center gap-1.5 mt-0.5">
+<span class="px-1.5 py-0.2 rounded bg-surface-container text-on-surface-variant text-[11px]">Aries Lagna</span>
+<span>Rohini Nakshatra (Pada 4)</span>
+</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-space-md">
+<div class="flex items-center gap-space-xs">
+<img class="w-9 h-9 rounded-lg object-cover shadow-sm" data-alt="Macro luxury product still of an untreated triangular Italian Red Coral stone encased in warm polished copper alloy with celestial astrolabe lines engraved in the metal." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiuXx25EOecmaovoZJx__gUqPchhEaqh5Y2F1SpayPlfuKznqmx8nJMliNGxA-zvuPVBrw5r74SVor0DDgWngwmuVMiQyAZxX5M-MKcvhsM8dPTadjKfjY-5n23X_tvkzqr0U7GtTz4zcKPf6dECCNL30RMAnnOxCE_FNEuBig-0C-ITZPyO2XIiDMsn_IQicaK2q6pxaQmCcFEaz8ulDuLA0wZQP4X_rgt1S6VDni"/>
+<div>
+<div class="font-title-md text-body-md text-on-surface font-semibold">Italian Red Coral (Moonga)</div>
+<div class="font-body-sm text-body-sm text-primary font-bold">6.50 Ratti • ₹7,500</div>
+</div>
+</div>
+</td>
+<td class="py-4 px-space-md">
+<div class="text-on-surface-variant text-body-sm leading-relaxed">
+<span class="text-primary font-medium">Mangal Dosha Neutralization:</span> Mars placed in 7th house causing marital discord. High vitality copper ring prescribed.
+                  </div>
+</td>
+<td class="py-4 px-space-md text-center">
+<div class="inline-flex flex-col items-center">
+<button class="flex items-center gap-1 px-2.5 py-1 rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-all font-label-sm text-label-sm font-semibold">
+<span class="material-symbols-outlined text-sm">visibility</span>
+<span>D1/D9 Chart</span>
+</button>
+<span class="text-[11px] text-primary font-semibold mt-1">98% Compatibility</span>
+</div>
+</td>
+<td class="py-4 px-space-md">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/15 text-primary font-label-sm text-label-sm font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                    Awaiting Approval
+                  </span>
+</td>
+<td class="py-4 px-space-md text-right">
+<div class="flex items-center justify-end gap-1.5">
+<button class="px-3 py-1.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-semibold hover:bg-primary-fixed-dim transition-all shadow-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-base">check_circle</span>
+<span>Approve</span>
+</button>
+<button class="px-2.5 py-1.5 rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-all font-label-md text-label-md" title="Edit Details">
+<span class="material-symbols-outlined text-base">tune</span>
+</button>
+<button class="px-2.5 py-1.5 rounded-lg bg-error-container/30 text-error hover:bg-error-container/60 transition-all font-label-md text-label-md" title="Reject &amp; Refund">
+<span class="material-symbols-outlined text-base">close</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Section 2: Flagged Sensitive Chats & Human Escalations -->
+<div class="mb-space-xl">
+<div class="flex items-center justify-between mb-space-md">
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-error text-xl">health_and_safety</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Flagged Sensitive Conversations</h2>
+</div>
+<p class="font-body-sm text-body-sm text-outline mt-1">Automatic guardrail triggers: AI astrologer halted fatalistic projections and paused conversation.</p>
+</div>
+<span class="px-3 py-1 rounded-full bg-error-container/30 text-error font-label-sm text-label-sm font-semibold flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-error animate-ping"></span>
+          2 Requires Human Pandit Follow-up
+        </span>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+<!-- Escalation Card 1 -->
+<div class="p-space-lg rounded-2xl bg-surface-container-low shadow-lg relative overflow-hidden flex flex-col justify-between">
+<div class="space-y-space-sm">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-title-lg text-title-lg text-on-surface">Rahul M.</span>
+<span class="font-label-sm text-label-sm text-outline font-semibold">User #US-44910</span>
+</div>
+<div class="text-body-sm font-body-sm text-outline mt-0.5">Session Ref: #CT-4091 • 13:42 IST</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-error text-on-error font-label-sm text-label-sm font-bold uppercase tracking-wider">
+                Critical Health Flag
+              </span>
+</div>
+<!-- Escalation Context -->
+<div class="p-space-md rounded-xl bg-surface-container space-y-2">
+<div class="flex items-center justify-between text-label-sm font-label-sm text-outline">
+<span class="font-semibold text-error flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">emergency</span> Severe Depressive Episode Keyword
+                </span>
+<span>Rahu-Ketu Transit Axis</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface italic">
+                “User queried fatalistic longevity questions citing inability to survive upcoming Saturn return. System blocked generative predictions instantly.”
+              </p>
+</div>
+<div class="flex items-center gap-space-xs text-body-sm font-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-base">verified</span>
+<span>Action Taken: Dispatched Vandrevala Mental Health Helpline widget; astrological output quarantined.</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-md mt-space-md border-t border-surface-container-highest/50">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-full bg-secondary-container/60 text-secondary flex items-center justify-center font-label-sm font-bold">
+                VS
+              </div>
+<span class="font-body-sm text-body-sm text-on-surface">Assigned: Pandit Vidyadhar Shastri</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-high text-on-surface text-label-sm font-label-sm font-semibold hover:bg-surface-container-highest transition-all">
+                View Chat Transcript
+              </button>
+<button class="px-3 py-1.5 rounded-lg bg-primary text-on-primary text-label-sm font-label-sm font-semibold hover:bg-primary-fixed-dim transition-all">
+                Initiate Compassionate Outreach
+              </button>
+</div>
+</div>
+</div>
+<!-- Escalation Card 2 -->
+<div class="p-space-lg rounded-2xl bg-surface-container-low shadow-lg relative overflow-hidden flex flex-col justify-between">
+<div class="space-y-space-sm">
+<div class="flex items-start justify-between">
+<div>
+<div class="flex items-center gap-2">
+<span class="font-title-lg text-title-lg text-on-surface">Sneha K.</span>
+<span class="font-label-sm text-label-sm text-outline font-semibold">User #US-71932</span>
+</div>
+<div class="text-body-sm font-body-sm text-outline mt-0.5">Session Ref: #CT-4108 • 14:02 IST</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-secondary-container text-secondary font-label-sm text-label-sm font-semibold uppercase tracking-wider">
+                Legal Conflict Flag
+              </span>
+</div>
+<!-- Escalation Context -->
+<div class="p-space-md rounded-xl bg-surface-container space-y-2">
+<div class="flex items-center justify-between text-label-sm font-label-sm text-outline">
+<span class="font-semibold text-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">gavel</span> Property Litigation Verdict
+                </span>
+<span>Mars in 6th House (Shatru Bhava)</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface italic">
+                “User seeking guarantees on civil court outcome for ancestral land parcel. Prompted AI to validate falsified documents against astrological muhurat.”
+              </p>
+</div>
+<div class="flex items-center gap-space-xs text-body-sm font-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-primary text-base">verified</span>
+<span>Action Taken: Standard Vedic counseling disclaimer injected; strict refusal of judicial predictions applied.</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-md mt-space-md border-t border-surface-container-highest/50">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+<span class="font-body-sm text-body-sm text-on-surface">Status: Statutory Disclaimer Acknowledged</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-high text-on-surface text-label-sm font-label-sm font-semibold hover:bg-surface-container-highest transition-all">
+                Audit Transcript
+              </button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-highest text-outline hover:text-on-surface text-label-sm font-label-sm font-semibold transition-all">
+                Resolve &amp; Close
+              </button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 3: Astrologer Activity Log & Audit Trail (Full Table) -->
+<div class="mb-space-xl">
+<div class="p-space-lg rounded-2xl bg-surface-container-low shadow-xl">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md pb-space-lg">
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-xl">fact_check</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Astrologer Activity Log &amp; Immutable Audit Trail</h2>
+</div>
+<p class="font-body-sm text-body-sm text-outline mt-1">Cryptographically hashed actions taken by senior pandits, temple priests, and algorithmic safeguards.</p>
+</div>
+<div class="flex items-center gap-space-xs text-label-sm font-label-sm text-outline">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span>Ledger Block Height: #892,109</span>
+</div>
+</div>
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container text-outline font-label-sm text-label-sm uppercase tracking-wider">
+<th class="py-3 px-space-md rounded-l-lg font-semibold">Timestamp (IST)</th>
+<th class="py-3 px-space-md font-semibold">Pandit / Agent Name</th>
+<th class="py-3 px-space-md font-semibold">Action Type</th>
+<th class="py-3 px-space-md font-semibold">Ref Token</th>
+<th class="py-3 px-space-md font-semibold">Outcome &amp; Details</th>
+<th class="py-3 px-space-md rounded-r-lg font-semibold text-right">Verification Hash</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high/40 font-body-md text-body-md text-on-surface">
+<!-- Log Entry 1 -->
+<tr class="hover:bg-surface-container/40 transition-colors">
+<td class="py-3.5 px-space-md text-body-sm font-mono text-outline">14:15:02</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-2">
+<img alt="Pandit avatar" class="w-6 h-6 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBO6jsIQZLuzTlG0TKgXIfaUiNYmAGjCyU04R2wyrDKXCk9Pc0OZy0IoV3Gmd8UYte4ty8odGWRXAyJkUyFPHUC_IVk4AJwIPB6IV19XzxFCa06YC1uNzJjqoC4nTUr3oupvNduJTU3CCf8InOHBIn3aLGs94jU1udSeWGa9PGffJix2vrSE7VHA9G5UblIfHhL-1spapXGmGmAPRBmZlCFjYDblDa-U8uOcfBZxZKR"/>
+<span class="font-title-md text-body-md text-on-surface">Pandit Vidyadhar Shastri</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="px-2 py-0.5 rounded bg-primary/10 text-primary text-label-sm font-label-sm font-semibold">
+                    Approved Yellow Sapphire
+                  </span>
+</td>
+<td class="py-3.5 px-space-md font-mono text-body-sm text-on-surface-variant font-medium">#ZK-89241</td>
+<td class="py-3.5 px-space-md text-body-sm text-on-surface">
+                  Cleared for Guru Pushya Sankalpa (16,000 Brihaspati Japa scheduled)
+                </td>
+<td class="py-3.5 px-space-md text-right font-mono text-body-sm text-outline">
+                  0x7f4a...9b12
+                </td>
+</tr>
+<!-- Log Entry 2 -->
+<tr class="hover:bg-surface-container/40 transition-colors">
+<td class="py-3.5 px-space-md text-body-sm font-mono text-outline">13:48:19</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-secondary-container flex items-center justify-center text-secondary text-xs">
+<span class="material-symbols-outlined text-sm">smart_toy</span>
+</div>
+<span class="font-title-md text-body-md text-on-surface">AI System (Brihaspati v4)</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="px-2 py-0.5 rounded bg-error-container/40 text-error text-label-sm font-label-sm font-semibold">
+                    Auto-Flagged Sensitive Chat
+                  </span>
+</td>
+<td class="py-3.5 px-space-md font-mono text-body-sm text-on-surface-variant font-medium">#CT-4091</td>
+<td class="py-3.5 px-space-md text-body-sm text-on-surface">
+                  Routed to human intervention; blocked suicide / distress outcome projections
+                </td>
+<td class="py-3.5 px-space-md text-right font-mono text-body-sm text-outline">
+                  0x41e8...cc04
+                </td>
+</tr>
+<!-- Log Entry 3 -->
+<tr class="hover:bg-surface-container/40 transition-colors">
+<td class="py-3.5 px-space-md text-body-sm font-mono text-outline">12:30:11</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center text-primary text-xs font-bold">
+                      AR
+                    </div>
+<span class="font-title-md text-body-md text-on-surface">Acharya Ramanathan</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="px-2 py-0.5 rounded bg-error-container/20 text-on-error-container text-label-sm font-label-sm font-semibold">
+                    Rejected Diamond Prescription
+                  </span>
+</td>
+<td class="py-3.5 px-space-md font-mono text-body-sm text-on-surface-variant font-medium">#ZK-88902</td>
+<td class="py-3.5 px-space-md text-body-sm text-on-surface">
+                  Incompatible with Scorpio Lagna (Venus functional malefic). 100% refund ₹34,000 processed.
+                </td>
+<td class="py-3.5 px-space-md text-right font-mono text-body-sm text-outline">
+                  0x3bc1...e08a
+                </td>
+</tr>
+<!-- Log Entry 4 -->
+<tr class="hover:bg-surface-container/40 transition-colors">
+<td class="py-3.5 px-space-md text-body-sm font-mono text-outline">11:15:44</td>
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-surface-bright flex items-center justify-center text-primary text-xs font-bold">
+                      TG
+                    </div>
+<span class="font-title-md text-body-md text-on-surface">Temple Priest Govind</span>
+</div>
+</td>
+<td class="py-3.5 px-space-md">
+<span class="px-2 py-0.5 rounded bg-surface-container-highest text-on-surface text-label-sm font-label-sm font-semibold">
+                    Consecration Completed
+                  </span>
+</td>
+<td class="py-3.5 px-space-md font-mono text-body-sm text-on-surface-variant font-medium">#ZK-88410</td>
+<td class="py-3.5 px-space-md text-body-sm text-on-surface">
+                  108 Gayatri Jaap recorded; digital proof &amp; consecrated yantra dispatched
+                </td>
+<td class="py-3.5 px-space-md text-right font-mono text-body-sm text-outline">
+                  0x99a2...11ff
+                </td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="flex items-center justify-between pt-space-md mt-space-md border-t border-surface-container-highest/40 text-body-sm font-body-sm text-outline">
+<span>Showing 4 of 148 operational entries (Past 24 Hours)</span>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1 rounded bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface disabled:opacity-40">Previous</button>
+<button class="px-3 py-1 rounded bg-surface-container hover:bg-surface-container-high transition-colors text-on-surface">Next</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></main></div></body></html>

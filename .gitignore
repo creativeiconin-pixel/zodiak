@@ -1,0 +1,38 @@
+# Dependencies and build output (rebuilt by deploy.sh)
+node_modules/
+vendor/
+dist/
+.next/
+out/
+zodiak-dashboard/public/build/
+zodiak-dashboard/public/hot
+zodiak-dashboard/public/storage
+
+# Secrets: keys live only in each server's .env or the encrypted settings table
+.env
+.env.*
+!.env.example
+auth.json
+*.pem
+*.key
+
+# Local data, logs and uploads
+*.log
+*.sqlite
+zodiak-dashboard/storage/app/private/*
+zodiak-dashboard/storage/app/public/*
+zodiak-dashboard/storage/framework/cache/data/*
+zodiak-dashboard/storage/framework/sessions/*
+zodiak-dashboard/storage/framework/views/*
+zodiak-dashboard/storage/logs/*
+zodiak-dashboard/bootstrap/cache/*.php
+.phpunit.result.cache
+.phpunit.cache/
+*.tsbuildinfo
+
+# Editor and OS clutter, personal Claude settings
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+.claude/settings.local.json

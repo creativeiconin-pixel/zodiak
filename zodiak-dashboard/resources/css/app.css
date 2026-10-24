@@ -1,0 +1,139 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+/* Zodiak "Modern Esoteric Luxury" tokens — keep in sync with ../zodiak-app/tailwind.config.ts */
+@theme {
+    --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+    --font-serif: 'Playfair Display', ui-serif, Georgia, serif;
+
+    --color-background: #101221;
+    --color-on-background: #e1e1f5;
+    --color-surface: #101221;
+    --color-surface-dim: #101221;
+    --color-surface-bright: #363848;
+    --color-surface-container-lowest: #0b0d1b;
+    --color-surface-container-low: #191b29;
+    --color-surface-container: #1d1f2d;
+    --color-surface-container-high: #272938;
+    --color-surface-container-highest: #323443;
+    --color-surface-variant: #323443;
+    --color-surface-tint: #e9c349;
+    --color-on-surface: #e1e1f5;
+    --color-on-surface-variant: #d0c5af;
+    --color-inverse-surface: #e1e1f5;
+    --color-inverse-on-surface: #2e2f3f;
+    --color-outline: #99907c;
+    --color-outline-variant: #4d4635;
+    --color-primary: #f2ca50;
+    --color-on-primary: #3c2f00;
+    --color-primary-container: #d4af37;
+    --color-on-primary-container: #554300;
+    --color-inverse-primary: #735c00;
+    --color-primary-fixed: #ffe088;
+    --color-primary-fixed-dim: #e9c349;
+    --color-on-primary-fixed: #241a00;
+    --color-on-primary-fixed-variant: #574500;
+    --color-secondary: #d0bcff;
+    --color-on-secondary: #3c0091;
+    --color-secondary-container: #571bc1;
+    --color-on-secondary-container: #c4abff;
+    --color-secondary-fixed: #e9ddff;
+    --color-secondary-fixed-dim: #d0bcff;
+    --color-on-secondary-fixed: #23005c;
+    --color-on-secondary-fixed-variant: #5516be;
+    --color-tertiary: #d9c6f7;
+    --color-on-tertiary: #372950;
+    --color-tertiary-container: #bdabda;
+    --color-on-tertiary-container: #4c3e66;
+    --color-tertiary-fixed: #ebdcff;
+    --color-tertiary-fixed-dim: #d1beef;
+    --color-on-tertiary-fixed: #22143a;
+    --color-on-tertiary-fixed-variant: #4e4068;
+    --color-error: #ffb4ab;
+    --color-on-error: #690005;
+    --color-error-container: #93000a;
+    --color-on-error-container: #ffdad6;
+
+    --spacing-space-xs: 0.25rem;
+    --spacing-space-sm: 0.5rem;
+    --spacing-space-md: 1rem;
+    --spacing-space-lg: 1.5rem;
+    --spacing-space-xl: 2.5rem;
+    --spacing-gutter: 1.25rem;
+    --spacing-gutter-mobile: 0.75rem;
+    --spacing-margin: 2rem;
+    --spacing-margin-mobile: 1rem;
+
+    --font-display-lg: var(--font-serif);
+    --font-headline-lg: var(--font-serif);
+    --font-headline-md: var(--font-serif);
+    --font-headline-sm: var(--font-serif);
+    --font-title-lg: var(--font-sans);
+    --font-title-md: var(--font-sans);
+    --font-body-lg: var(--font-sans);
+    --font-body-md: var(--font-sans);
+    --font-body-sm: var(--font-sans);
+    --font-label-lg: var(--font-sans);
+    --font-label-md: var(--font-sans);
+    --font-label-sm: var(--font-sans);
+
+    --text-display-lg: 48px;
+    --text-display-lg--line-height: 56px;
+    --text-display-lg--letter-spacing: -0.02em;
+    --text-display-lg--font-weight: 600;
+    --text-headline-lg: 32px;
+    --text-headline-lg--line-height: 40px;
+    --text-headline-lg--letter-spacing: -0.01em;
+    --text-headline-lg--font-weight: 600;
+    --text-headline-md: 24px;
+    --text-headline-md--line-height: 32px;
+    --text-headline-md--font-weight: 500;
+    --text-headline-sm: 20px;
+    --text-headline-sm--line-height: 28px;
+    --text-headline-sm--font-weight: 500;
+    --text-title-lg: 18px;
+    --text-title-lg--line-height: 26px;
+    --text-title-lg--font-weight: 600;
+    --text-title-md: 16px;
+    --text-title-md--line-height: 24px;
+    --text-title-md--font-weight: 600;
+    --text-body-lg: 16px;
+    --text-body-lg--line-height: 26px;
+    --text-body-md: 14px;
+    --text-body-md--line-height: 22px;
+    --text-body-sm: 12px;
+    --text-body-sm--line-height: 18px;
+    --text-label-lg: 14px;
+    --text-label-lg--line-height: 20px;
+    --text-label-lg--letter-spacing: 0.02em;
+    --text-label-lg--font-weight: 600;
+    --text-label-md: 12px;
+    --text-label-md--line-height: 16px;
+    --text-label-md--letter-spacing: 0.04em;
+    --text-label-md--font-weight: 500;
+    --text-label-sm: 10px;
+    --text-label-sm--line-height: 14px;
+    --text-label-sm--letter-spacing: 0.08em;
+    --text-label-sm--font-weight: 600;
+}
+
+@layer base {
+    body {
+        overscroll-behavior: none;
+    }
+}
+
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+}
