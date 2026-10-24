@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Actions\ApplyIntegrationSettings;
 use App\Enums\RechargeStatus;
+use App\Models\ChatMessage;
 use App\Models\CreditRecharge;
+use App\Models\FlaggedChat;
 use App\Models\Order;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -30,6 +32,13 @@ class AppServiceProvider extends ServiceProvider
         View::composer(['partials.op-header', 'dashboard', 'overview'], function ($view): void {
             $view->with('paymentsToCheck', Order::awaitingPaymentCheck()->count()
                 + CreditRecharge::where('status', RechargeStatus::VerificationPending)->count());
+        });
+
+        // Everything waiting in the Pandit queue: remedy orders to approve, held suggestions and open sensitive chats
+        View::composer('partials.op-header', function ($view): void {
+            $view->with('panditQueueCount', Order::awaitingReview()->count()
+                + ChatMessage::awaitingReview()->count()
+                + FlaggedChat::open()->count());
         });
     }
 }

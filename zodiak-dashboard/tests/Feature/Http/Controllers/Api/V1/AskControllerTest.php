@@ -124,17 +124,46 @@ class AskControllerTest extends TestCase
         config(['services.elevenlabs.key' => 'xi-key', 'services.elevenlabs.voice_id' => 'voice123']);
         Http::fake(['api.elevenlabs.io/*' => Http::response(str_repeat('a', 16000), 200, ['Content-Type' => 'audio/mpeg'])]);
         $this->fakeClaude($this->answer());
+        $seeker = Seeker::factory()->create();
+        $voiceNote = fn () => $this->actingAs($seeker, 'sanctum')->post('/api/v1/ask', [
+            'message' => 'Meri shaadi kab hogi?',
+            'audio' => UploadedFile::fake()->create('note.webm', 40, 'audio/webm'),
+            'audio_duration_ms' => 4200,
+        ], ['Accept' => 'application/json', 'X-Locale' => 'kn']);
 
-        $this->actingAs(Seeker::factory()->create(), 'sanctum')
-            ->post('/api/v1/ask', [
-                'message' => 'Meri shaadi kab hogi?',
-                'audio' => UploadedFile::fake()->create('note.webm', 40, 'audio/webm'),
-                'audio_duration_ms' => 4200,
-            ], ['Accept' => 'application/json', 'X-Locale' => 'kn'])
-            ->assertCreated()
-            ->assertJsonPath('data.audio.duration_ms', 2000);
+        // The first voice note is answered in text; the second one in a row gets a voice answer
+        $voiceNote()->assertCreated()->assertJsonPath('data.audio', null);
+        $voiceNote()->assertCreated()->assertJsonPath('data.audio.duration_ms', 2000);
 
         Http::assertSent(fn ($request) => str_contains($request->url(), '/v1/text-to-speech/voice123') && $request['language_code'] === 'kn' && $request->hasHeader('xi-api-key', 'xi-key'));
+    }
+
+    public function test_voice_note_after_a_typed_question_is_answered_in_text(): void
+    {
+        Storage::fake('local');
+        config(['services.elevenlabs.key' => 'xi-key', 'services.elevenlabs.voice_id' => 'voice123']);
+        Http::fake();
+        $this->fakeClaude($this->answer());
+        $seeker = Seeker::factory()->create();
+        $this->actingAs($seeker, 'sanctum')->postJson('/api/v1/ask', ['message' => 'Hello Pandit Jii'])->assertCreated();
+
+        $this->actingAs($seeker, 'sanctum')
+            ->post('/api/v1/ask', ['message' => 'Meri shaadi kab hogi?', 'audio' => UploadedFile::fake()->create('note.webm', 40, 'audio/webm'), 'audio_duration_ms' => 4200], ['Accept' => 'application/json'])
+            ->assertCreated()
+            ->assertJsonPath('data.audio', null);
+
+        Http::assertNothingSent();
+    }
+
+    public function test_pandit_jii_is_told_to_answer_in_the_language_the_person_writes_in(): void
+    {
+        $seeker = Seeker::factory()->create();
+        $this->mock(AskClaude::class, function (MockInterface $mock): void {
+            $mock->shouldReceive('isConfigured')->andReturnTrue();
+            $mock->shouldReceive('answer')->withArgs(fn (array $system) => str_contains(collect($system)->pluck('text')->implode(' '), 'gets a simple Hinglish reply in English letters'))->andReturn($this->answer());
+        });
+
+        $this->actingAs($seeker, 'sanctum')->postJson('/api/v1/ask', ['message' => 'Meri naukri kab lagegi?'], ['X-Locale' => 'en'])->assertCreated();
     }
 
     public function test_non_audio_upload_returns_422(): void

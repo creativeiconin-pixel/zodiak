@@ -34,7 +34,7 @@
     <div class="absolute -top-32 left-1/4 w-96 h-96 bg-secondary-container/20 rounded-full blur-3xl pointer-events-none"></div>
 
     @if ($paymentsToCheck > 0)
-        <a href="{{ route('payments.index') }}" class="relative z-10 mb-space-lg flex items-center gap-space-sm p-space-md rounded-xl bg-primary/15 ring-1 ring-primary/50 hover:bg-primary/20 transition-colors" role="status">
+        <a href="{{ route('payments.index') }}" class="relative z-10 mb-space-lg flex items-center gap-space-sm p-space-md rounded-xl bg-primary/15 ring-1 ring-primary/50 hover:bg-primary/20 transition-colors" role="status" data-keep>
             <span class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center shrink-0">
                 <span class="material-symbols-outlined">fact_check</span>
             </span>
@@ -61,7 +61,7 @@
     </div>
 
     {{-- Money --}}
-    <div class="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter mb-gutter">
+    <div class="op-stats relative z-10 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-gutter mb-gutter">
         @foreach ([
             ['Revenue', $inr($kpis['revenue']), 'account_balance_wallet', 'text-primary', 'Orders '.$inr($kpis['order_revenue']).' + credits '.$inr($kpis['credit_sales']).', '.$periodLabel],
             ['Cost', $inr($kpis['cost']), 'local_shipping', 'text-secondary', 'Our cost for those orders'],
@@ -80,7 +80,7 @@
     </div>
 
     {{-- Operations & users --}}
-    <div class="relative z-10 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-gutter mb-space-lg">
+    <div class="op-stats relative z-10 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-gutter mb-space-lg">
         @foreach ([
             ['Credit sales', $inr($kpis['credit_sales']), 'toll', route('payments.index'), 'text-secondary', trans_choice(':count recharge|:count recharges', $kpis['credit_recharges']).', '.$periodLabel],
             ['Payments to check', number_format($kpis['payments_waiting']), 'pending_actions', route('payments.index'), $kpis['payments_waiting'] > 0 ? 'text-error' : 'text-primary', 'UTR waiting for a check'],

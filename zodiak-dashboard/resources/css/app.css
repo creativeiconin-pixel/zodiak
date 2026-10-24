@@ -137,3 +137,29 @@
     direction: ltr;
     -webkit-font-smoothing: antialiased;
 }
+
+/* Op-Center count tiles: side by side and compact on phones */
+@media (max-width: 639px) {
+    .op-stats > * {
+        padding: 0.75rem !important;
+        min-width: 0;
+    }
+    .op-stats .text-display-lg {
+        font-size: 1.5rem !important;
+        line-height: 2rem !important;
+        margin-top: 0.25rem !important;
+    }
+    .op-stats .text-label-md,
+    .op-stats .text-label-sm {
+        font-size: 0.625rem !important;
+        letter-spacing: 0.04em !important;
+    }
+    .op-stats .material-symbols-outlined {
+        font-size: 1.1rem !important;
+    }
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 4.5rem;
+}

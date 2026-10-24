@@ -115,6 +115,8 @@ class AskController extends Controller
         $problems = $remedy ? $checkSuggestion->problems($remedy, $chart, $seeker) : [];
 
         $audioPath = $request->file('audio')?->store("voice-notes/{$seeker->id}", 'local');
+        // Two voice notes in a row get a voice answer; anything else is answered in text
+        $repliesWithVoice = $audioPath && $seeker->chatMessages()->where('role', 'user')->latest('id')->value('audio_path') !== null;
 
         $reply = DB::transaction(function () use ($request, $seeker, $question, $audioPath, $answer, $remedySlug, $problems, $flag, $recordAuditLog): ChatMessage {
             $seeker->chatMessages()->create([
@@ -145,8 +147,8 @@ class AskController extends Controller
             return $reply;
         });
 
-        // A voice question gets a voice answer (care messages stay as text so the helpline number is easy to read)
-        if ($audioPath && ($answer['kind'] ?? null) !== 'care') {
+        // Care messages stay as text so the helpline number is easy to read
+        if ($repliesWithVoice && ($answer['kind'] ?? null) !== 'care') {
             $voice = $synthesizeVoiceReply->handle(trim(($answer['short_answer'] ?? '').' '.($answer['practical_step'] ?? '')), app()->getLocale(), "voice-notes/{$seeker->id}");
 
             if ($voice !== null) {
@@ -245,7 +247,11 @@ class AskController extends Controller
      */
     private function seekerContext(Seeker $seeker, ?array $chart): string
     {
-        $language = self::LANGUAGE_INSTRUCTIONS[app()->getLocale()] ?? self::LANGUAGE_INSTRUCTIONS['en'];
+        $fallback = self::LANGUAGE_INSTRUCTIONS[app()->getLocale()] ?? self::LANGUAGE_INSTRUCTIONS['en'];
+        $language = 'Reply in the same language and script as the person\'s latest message, whatever language the app is set to: '
+            .'Hinglish (Hindi words in English letters, like "meri shaadi kab hogi") gets a simple Hinglish reply in English letters; '
+            .'Hindi in Devanagari gets simple Hindi in Devanagari; Kannada gets simple Kannada in Kannada script; English gets simple English. '
+            ."Write follow_ups in that same language. If you cannot tell the language: {$fallback}";
         $lines = [$language, "The person's name is {$seeker->name}".($seeker->gender ? " ({$seeker->gender})" : '').'. Today is '.now('Asia/Kolkata')->format('j F Y').'.'];
 
         if ($seeker->hasBirthDetails()) {

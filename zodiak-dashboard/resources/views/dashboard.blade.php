@@ -1,4 +1,4 @@
-@extends('layouts.base', ['title' => 'Remedy Verification • Zodiak Op-Center'])
+@extends('layouts.base', ['title' => 'Pandit queue • Zodiak Op-Center'])
 
 @use('App\Enums\ActorType')
 @use('App\Enums\FlagType')
@@ -10,117 +10,21 @@
 @php
     $inr = fn (int $amount): string => Number::currency($amount, 'INR', 'en_IN', 0);
     $initials = fn (string $name): string => Str::of($name)->explode(' ')->filter()->take(2)->map(fn ($part) => Str::substr($part, 0, 1))->implode('');
+    // Quick-jump chips to each part of the queue
     $navItems = [
-        ['#approvals', 'diamond', 'Pending Gemstones', $reviewQueueCount, 'bg-primary/20 text-primary', 'group-hover:text-primary'],
-        ['#suggestion-reviews', 'rule', 'Suggestions to Approve', $suggestionReviews->count(), 'bg-secondary-container text-secondary', 'group-hover:text-primary'],
-        ['#sensitive-chats', 'crisis_alert', 'Sensitive Chats', $flaggedChats->count(), 'bg-error-container text-on-error-container', 'group-hover:text-error'],
-        ['#dispatch', 'local_shipping', 'Consecration Dispatch', $fulfilmentQueue->count(), 'bg-surface-container-highest text-secondary', 'group-hover:text-primary'],
-        ['#audit-log', 'fact_check', 'Astrologer Audit Log', null, '', 'group-hover:text-primary'],
+        ['#approvals', 'diamond', 'Orders to approve', $reviewQueueCount],
+        ['#suggestion-reviews', 'rule', 'Suggestions to check', $suggestionReviews->count()],
+        ['#sensitive-chats', 'crisis_alert', 'Sensitive chats', $flaggedChats->count()],
+        ['#dispatch', 'local_shipping', 'Blessing & shipping', $fulfilmentQueue->count()],
+        ['#audit-log', 'fact_check', 'Activity log', null],
     ];
 @endphp
 
 @section('body')
-<aside class="fixed left-0 top-0 h-full w-72 bg-surface-container-lowest z-50 hidden lg:flex flex-col pt-4 pb-6 shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
-    <div class="px-space-lg pb-space-md mb-space-md flex items-center gap-space-sm">
-        <div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
-        <span class="font-label-sm text-label-sm uppercase tracking-widest text-outline">Operational Nodes</span>
-    </div>
-    <nav class="flex-1 px-space-md space-y-space-xs">
-        @foreach ($navItems as [$href, $icon, $label, $count, $countClasses, $hoverClasses])
-            <a href="{{ $href }}" class="flex items-center justify-between px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group {{ $loop->first ? 'bg-primary-container! text-on-primary-container! font-semibold shadow-[0_0_16px_rgba(212,175,55,0.25)]' : '' }}">
-                <div class="flex items-center gap-space-sm">
-                    <span class="material-symbols-outlined {{ $loop->first ? '' : 'text-outline' }} {{ $hoverClasses }} transition-colors text-xl">{{ $icon }}</span>
-                    <span class="font-title-md text-body-md font-medium">{{ $label }}</span>
-                </div>
-                @if ($count)
-                    <span class="px-2 py-0.5 rounded-full {{ $countClasses }} font-label-sm text-label-sm font-semibold">{{ $count }}</span>
-                @endif
-            </a>
-        @endforeach
-        <div class="my-space-sm border-t border-surface-container-high"></div>
-        <a href="{{ route('overview') }}" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group">
-            <span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-xl">monitoring</span>
-            <span class="font-title-md text-body-md font-medium">Overview & Profit</span>
-        </a>
-        <a href="{{ route('orders.index') }}" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group">
-            <span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-xl">receipt_long</span>
-            <span class="font-title-md text-body-md font-medium">All Orders</span>
-        </a>
-        <a href="{{ route('payments.index') }}" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group">
-            <span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-xl">payments</span>
-            <span class="font-title-md text-body-md font-medium flex-1">Payments</span>
-            @if ($paymentsToCheck > 0)
-                <span class="px-2 py-0.5 rounded-full bg-primary text-on-primary font-label-sm text-label-sm font-bold" title="UTRs to check">{{ $paymentsToCheck }}</span>
-            @endif
-        </a>
-        <a href="{{ route('products.index') }}" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group">
-            <span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-xl">inventory_2</span>
-            <span class="font-title-md text-body-md font-medium">Products</span>
-        </a>
-        <a href="{{ route('seekers.index') }}" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group">
-            <span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-xl">group</span>
-            <span class="font-title-md text-body-md font-medium">Users</span>
-        </a>
-        <a href="{{ route('settings.integrations.edit') }}" class="flex items-center gap-space-sm px-space-md py-space-sm rounded-xl text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all group">
-            <span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors text-xl">settings</span>
-            <span class="font-title-md text-body-md font-medium">Integrations &amp; API Keys</span>
-        </a>
-    </nav>
-    <div class="px-space-md mt-auto pt-space-md">
-        <div class="p-space-md rounded-xl bg-surface-container-low shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
-            <div class="flex items-center gap-space-xs text-primary mb-1">
-                <span class="material-symbols-outlined text-base">verified</span>
-                <span class="font-label-sm text-label-sm uppercase tracking-wider font-semibold">Vedic Registry</span>
-            </div>
-            <p class="font-body-sm text-body-sm text-outline">Lahiri Ayanamsa algorithmically validated for current planetary cycle.</p>
-        </div>
-    </div>
-</aside>
+@include('partials.op-header')
 
-<div class="lg:pl-72 flex flex-col min-h-screen">
-    <header class="fixed top-0 left-0 lg:left-72 right-0 h-16 bg-surface-container-lowest/80 backdrop-blur-xl z-40 shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
-        <div class="h-16 w-full px-space-lg flex items-center justify-between gap-space-md">
-            <div class="flex items-center gap-space-md min-w-0">
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-space-sm shrink-0">
-                    <img alt="Zodiak Brand Logo" class="h-8 w-auto object-contain" src="/images/zodiak-logo.jpg">
-                    <span class="font-title-lg text-title-lg tracking-wider font-bold text-on-surface hidden sm:inline">ZODIAK OP-CENTER</span>
-                </a>
-                <div class="h-4 w-px bg-outline-variant/40 mx-space-xs hidden md:block"></div>
-                <form method="GET" action="{{ route('dashboard') }}" class="relative w-56 lg:w-96 hidden md:block">
-                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">search</span>
-                    <input name="q" value="{{ $search }}" class="w-full pl-9 pr-4 py-1.5 rounded-lg bg-surface-container text-body-md text-on-surface placeholder:text-outline focus:outline-none focus:ring-1 focus:ring-secondary/50 font-body-md transition-all" placeholder="Search order token or seeker name..." type="search">
-                </form>
-            </div>
-            <div class="flex items-center gap-space-md">
-                <div class="hidden xl:flex items-center gap-space-xs px-3 py-1.5 rounded-full bg-surface-container-high shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
-                    <div class="w-2 h-2 rounded-full bg-surface-tint animate-pulse"></div>
-                    <span class="font-label-sm text-label-sm uppercase tracking-wide text-on-surface font-semibold">Live Ephemeris: Synced</span>
-                </div>
-                <div class="h-4 w-px bg-outline-variant/40"></div>
-                <div class="flex items-center gap-space-sm pl-space-xs">
-                    <div class="flex flex-col text-right">
-                        <span class="font-label-lg text-label-lg font-semibold text-on-surface leading-tight">{{ auth()->user()->name }}</span>
-                        <span class="font-label-sm text-label-sm text-primary uppercase font-medium">{{ auth()->user()->title ?? 'Pandit' }}</span>
-                    </div>
-                    <img alt="Profile" class="w-8 h-8 rounded-full object-cover ring-1 ring-primary/40" src="/images/profile-avatar.jpg">
-                    <a href="{{ route('seekers.index') }}" aria-label="Users" title="Users" class="p-2 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors">
-                        <span class="material-symbols-outlined text-xl">group</span>
-                    </a>
-                    <a href="{{ route('settings.integrations.edit') }}" aria-label="Integrations and API keys" title="Integrations & API keys" class="p-2 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors">
-                        <span class="material-symbols-outlined text-xl">settings</span>
-                    </a>
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" aria-label="Sign out" title="Sign out" class="p-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors">
-                            <span class="material-symbols-outlined text-xl">logout</span>
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <main class="w-full pt-16 bg-surface min-h-[calc(100vh-4rem)] flex-1">
+<div class="flex flex-col min-h-screen">
+    <main class="w-full bg-surface flex-1">
         <div class="relative w-full overflow-hidden px-space-lg py-space-xl">
             <div class="absolute -top-32 left-1/4 w-96 h-96 bg-secondary-container/20 rounded-full blur-3xl pointer-events-none"></div>
             <div class="absolute top-10 right-1/4 w-80 h-80 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
@@ -141,31 +45,36 @@
             {{-- Header Section --}}
             <div class="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-space-md mb-space-xl">
                 <div class="space-y-space-xs max-w-3xl">
-                    <div class="flex items-center gap-space-xs">
-                        <span class="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm uppercase tracking-widest flex items-center gap-1.5 shadow-sm">
-                            <span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
-                            Operational Safeguard Protocol v4.2
-                        </span>
-                        <span class="text-outline text-label-sm uppercase font-label-sm tracking-wider">Ayanamsa: Lahiri</span>
-                    </div>
-                    <h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Remedy Verification &amp; Operational Safeguards</h1>
+                    <span class="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm uppercase tracking-widest">Pandit team</span>
+                    <h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Pandit queue</h1>
                     <p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
-                        Human-in-the-loop review for AI-prescribed gems, sensitive user disclosures, and financial reconciliation. Ensuring metaphysical integrity and algorithmic liability compliance.
+                        Everything waiting for a Pandit: remedy orders to check against the chart, Pandit Jii's product suggestions, sensitive chats that need a person, and remedies to bless and ship.
                     </p>
                 </div>
-                <div class="flex items-center gap-space-sm self-start md:self-auto">
-                    <a href="#audit-log" class="flex items-center gap-space-xs px-space-md py-2.5 rounded-xl bg-surface-container-high text-on-surface text-label-lg font-label-lg shadow-md hover:bg-surface-container-highest transition-all">
-                        <span class="material-symbols-outlined text-lg text-outline">history</span>
-                        <span>Shift Logs</span>
-                    </a>
-                </div>
+                <form method="GET" action="{{ route('dashboard') }}" class="relative w-full md:w-80" role="search">
+                    <label for="queue-search" class="sr-only">Search the queue</label>
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">search</span>
+                    <input id="queue-search" name="q" value="{{ $search }}" type="search" placeholder="Search order number or name…" class="w-full pl-9 pr-4 py-2.5 rounded-xl bg-surface-container text-on-surface placeholder:text-outline font-body-md text-body-md focus:outline-none focus:ring-1 focus:ring-primary/60">
+                </form>
             </div>
 
+            {{-- Jump to a part of the queue --}}
+            <nav class="relative z-10 -mt-space-md mb-space-lg flex gap-2 overflow-x-auto pb-1" aria-label="Queue sections">
+                @foreach ($navItems as [$href, $icon, $label, $count])
+                    <a href="{{ $href }}" class="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors font-label-lg text-label-lg">
+                        <span class="material-symbols-outlined text-lg text-outline">{{ $icon }}</span> {{ $label }}
+                        @if ($count)
+                            <span class="min-w-5 h-5 px-1.5 rounded-full bg-primary text-on-primary font-label-sm text-label-sm font-bold flex items-center justify-center">{{ $count }}</span>
+                        @endif
+                    </a>
+                @endforeach
+            </nav>
+
             {{-- KPI Metric Strip --}}
-            <div class="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter mb-space-xl">
+            <div class="op-stats relative z-10 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-gutter mb-space-xl">
                 <div class="relative p-space-lg rounded-xl bg-surface-container-low shadow-md overflow-hidden">
                     <div class="flex items-center justify-between mb-space-sm">
-                        <span class="font-label-md text-label-md uppercase tracking-wider text-outline font-semibold">Pending Approvals</span>
+                        <span class="font-label-md text-label-md uppercase tracking-wider text-outline font-semibold">Orders to approve</span>
                         <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary"><span class="material-symbols-outlined text-lg">diamond</span></div>
                     </div>
                     <div class="flex items-baseline gap-space-sm">
@@ -174,42 +83,42 @@
                             <span class="px-2 py-0.5 rounded-full bg-primary/15 text-primary text-label-sm font-label-sm font-semibold">{{ $highUrgencyCount }} High Urgency</span>
                         @endif
                     </div>
-                    <p class="mt-2 font-body-sm text-body-sm text-on-surface-variant">Payment held in escrow until a pandit verifies the chart.</p>
+                    <p class="mt-2 font-body-sm text-body-sm text-on-surface-variant">Paid, waiting for a Pandit to check the chart.</p>
                 </div>
                 <div class="relative p-space-lg rounded-xl bg-surface-container-low shadow-md overflow-hidden">
                     <div class="flex items-center justify-between mb-space-sm">
-                        <span class="font-label-md text-label-md uppercase tracking-wider text-outline font-semibold">Flagged AI Chats</span>
+                        <span class="font-label-md text-label-md uppercase tracking-wider text-outline font-semibold">Sensitive chats</span>
                         <div class="w-8 h-8 rounded-lg bg-error-container/30 flex items-center justify-center text-error"><span class="material-symbols-outlined text-lg">crisis_alert</span></div>
                     </div>
                     <div class="flex items-baseline gap-space-sm">
                         <span class="font-display-lg text-display-lg font-bold {{ $flaggedChats->isNotEmpty() ? 'text-error' : 'text-on-surface' }}">{{ $flaggedChats->count() }}</span>
                         @if ($flaggedChats->isNotEmpty())
-                            <span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container text-label-sm font-label-sm font-semibold">Intervention Required</span>
+                            <span class="px-2 py-0.5 rounded-full bg-error-container text-on-error-container text-label-sm font-label-sm font-semibold">Needs a person</span>
                         @endif
                     </div>
-                    <p class="mt-2 font-body-sm text-body-sm text-on-surface-variant">Medical, distress &amp; legal guardrails triggered</p>
+                    <p class="mt-2 font-body-sm text-body-sm text-on-surface-variant">Health, distress or legal topics that need a person</p>
                 </div>
                 <div class="relative p-space-lg rounded-xl bg-surface-container-low shadow-md overflow-hidden">
                     <div class="flex items-center justify-between mb-space-sm">
-                        <span class="font-label-md text-label-md uppercase tracking-wider text-outline font-semibold">Pending Refunds</span>
+                        <span class="font-label-md text-label-md uppercase tracking-wider text-outline font-semibold">Refunds to send</span>
                         <div class="w-8 h-8 rounded-lg bg-secondary-container/40 flex items-center justify-center text-secondary"><span class="material-symbols-outlined text-lg">currency_exchange</span></div>
                     </div>
                     <div class="flex items-baseline gap-space-sm">
                         <span class="font-display-lg text-display-lg font-bold text-on-surface">{{ $inr($refundClaimTotal) }}</span>
                         <span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-secondary text-label-sm font-label-sm font-semibold">{{ $refundClaimCount }} {{ Str::plural('claim', $refundClaimCount) }}</span>
                     </div>
-                    <p class="mt-2 font-body-sm text-body-sm text-on-surface-variant">Refunds awaiting gateway settlement</p>
+                    <p class="mt-2 font-body-sm text-body-sm text-on-surface-variant">Money to send back to customers</p>
                 </div>
                 <div class="relative p-space-lg rounded-xl bg-surface-container-low shadow-md overflow-hidden">
                     <div class="flex items-center justify-between mb-space-sm">
-                        <span class="font-label-md text-label-md uppercase tracking-wider text-outline font-semibold">Pran-Pratishtha Pipeline</span>
+                        <span class="font-label-md text-label-md uppercase tracking-wider text-outline font-semibold">Ready to bless</span>
                         <div class="w-8 h-8 rounded-lg bg-surface-bright flex items-center justify-center text-on-surface"><span class="material-symbols-outlined text-lg">temple_hindu</span></div>
                     </div>
                     <div class="flex items-baseline gap-space-sm">
                         <span class="font-display-lg text-display-lg font-bold text-on-surface">{{ $pipelineCount }}</span>
                         <span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-primary text-label-sm font-label-sm font-semibold">Ready</span>
                     </div>
-                    <p class="mt-2 font-body-sm text-body-sm text-on-surface-variant">Approved remedies awaiting consecration</p>
+                    <p class="mt-2 font-body-sm text-body-sm text-on-surface-variant">Approved remedies waiting to be blessed</p>
                 </div>
             </div>
 
@@ -220,9 +129,9 @@
                         <div>
                             <div class="flex items-center gap-space-xs">
                                 <span class="material-symbols-outlined text-primary text-xl">verified_user</span>
-                                <h2 class="font-headline-sm text-headline-sm text-on-surface">Gemstone &amp; Talisman Approval Queue</h2>
+                                <h2 class="font-headline-sm text-headline-sm text-on-surface">Orders to approve</h2>
                             </div>
-                            <p class="font-body-sm text-body-sm text-outline mt-1">High-value remedy prescriptions requiring verification against D1 (Rasi) &amp; D9 (Navamsha) charts.</p>
+                            <p class="font-body-sm text-body-sm text-outline mt-1">Check each remedy against the person's chart, then approve it, ask for a trial first, or reject it (they get a full refund).</p>
                         </div>
                         <div class="flex items-center bg-surface-container rounded-lg p-1 text-label-sm font-label-sm">
                             @foreach ([null => "All ({$reviewQueueCount})", 'saturnian' => 'Saturnian (Neelam)', 'solar-jovian' => 'Solar / Jovian'] as $filterKey => $filterLabel)
@@ -237,7 +146,7 @@
                                 <tr class="bg-surface-container text-outline font-label-sm text-label-sm uppercase tracking-wider">
                                     <th class="py-3 px-space-md rounded-l-lg font-semibold">Order ID &amp; Customer</th>
                                     <th class="py-3 px-space-md font-semibold">Prescribed Remedy &amp; Price</th>
-                                    <th class="py-3 px-space-md font-semibold min-w-[240px]">AI Astrologer Rationale</th>
+                                    <th class="py-3 px-space-md font-semibold min-w-[240px]">Why it was suggested</th>
                                     <th class="py-3 px-space-md font-semibold">Suitability &amp; Status</th>
                                     <th class="py-3 px-space-md rounded-r-lg font-semibold text-right">Actions</th>
                                 </tr>
@@ -350,9 +259,9 @@
                     <div class="pb-space-lg">
                         <div class="flex items-center gap-space-xs">
                             <span class="material-symbols-outlined text-primary text-xl">temple_hindu</span>
-                            <h2 class="font-headline-sm text-headline-sm text-on-surface">Consecration &amp; Dispatch Pipeline</h2>
+                            <h2 class="font-headline-sm text-headline-sm text-on-surface">Blessing &amp; shipping</h2>
                         </div>
-                        <p class="font-body-sm text-body-sm text-outline mt-1">Approved remedies moving through Pran-Pratishtha, insured dispatch and sacred delivery.</p>
+                        <p class="font-body-sm text-body-sm text-outline mt-1">Approved remedies: mark each step as it happens — blessed, shipped, delivered.</p>
                     </div>
                     @if ($fulfilmentQueue->isEmpty())
                         <p class="py-space-md text-center font-body-md text-body-md text-outline">Nothing in the pipeline. Approved remedies appear here.</p>
@@ -479,14 +388,14 @@
                     <div>
                         <div class="flex items-center gap-space-xs">
                             <span class="material-symbols-outlined text-error text-xl">health_and_safety</span>
-                            <h2 class="font-headline-sm text-headline-sm text-on-surface">Flagged Sensitive Conversations</h2>
+                            <h2 class="font-headline-sm text-headline-sm text-on-surface">Sensitive chats</h2>
                         </div>
-                        <p class="font-body-sm text-body-sm text-outline mt-1">Automatic guardrail triggers: AI astrologer halted fatalistic projections and paused conversation.</p>
+                        <p class="font-body-sm text-body-sm text-outline mt-1">Chats where Pandit Jii stopped and gave a helpline or declined, so a person should follow up.</p>
                     </div>
                     @if ($flaggedChats->isNotEmpty())
                         <span class="px-3 py-1 rounded-full bg-error-container/30 text-error font-label-sm text-label-sm font-semibold flex items-center gap-1.5">
                             <span class="w-2 h-2 rounded-full bg-error animate-ping"></span>
-                            {{ $flaggedChats->count() }} Requires Human Pandit Follow-up
+                            {{ $flaggedChats->count() }} need a Pandit to follow up
                         </span>
                     @endif
                 </div>
@@ -552,13 +461,13 @@
                         <div>
                             <div class="flex items-center gap-space-xs">
                                 <span class="material-symbols-outlined text-secondary text-xl">fact_check</span>
-                                <h2 class="font-headline-sm text-headline-sm text-on-surface">Astrologer Activity Log &amp; Immutable Audit Trail</h2>
+                                <h2 class="font-headline-sm text-headline-sm text-on-surface">Activity log</h2>
                             </div>
-                            <p class="font-body-sm text-body-sm text-outline mt-1">SHA-256 hash-chained actions taken by senior pandits, temple priests, and algorithmic safeguards.</p>
+                            <p class="font-body-sm text-body-sm text-outline mt-1">Everything the team and Pandit Jii did, newest first. Entries are chained so they can't be changed later.</p>
                         </div>
                         <div class="flex items-center gap-space-xs text-label-sm font-label-sm text-outline">
                             <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-                            <span>Ledger Block Height: #{{ number_format($latestAuditLogId) }}</span>
+                            <span>{{ number_format($latestAuditLogId) }} entries</span>
                         </div>
                     </div>
                     <div class="w-full overflow-x-auto">
@@ -600,7 +509,7 @@
                         </table>
                     </div>
                     <div class="flex items-center justify-between pt-space-md">
-                        <span class="font-body-sm text-body-sm text-outline">Showing {{ $auditLogs->count() }} of {{ $auditLogs->total() }} operational entries</span>
+                        <span class="font-body-sm text-body-sm text-outline">Showing {{ $auditLogs->count() }} of {{ $auditLogs->total() }} entries</span>
                         <div class="flex items-center gap-2">
                             @if ($auditLogs->previousPageUrl())
                                 <a href="{{ $auditLogs->previousPageUrl() }}#audit-log" class="px-3 py-1.5 rounded-lg bg-surface-container text-on-surface text-label-md font-label-md">Previous</a>

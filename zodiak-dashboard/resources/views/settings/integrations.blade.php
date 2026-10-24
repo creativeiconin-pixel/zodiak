@@ -53,7 +53,7 @@
                 </div>
 
                 @if ($test && $test['integration'] === $slug)
-                    <div class="mb-space-md flex items-center gap-space-sm px-space-md py-2.5 rounded-lg {{ $test['ok'] ? 'bg-primary/10 text-primary' : 'bg-error-container/30 text-error' }}" role="status">
+                    <div class="mb-space-md flex items-center gap-space-sm px-space-md py-2.5 rounded-lg {{ $test['ok'] ? 'bg-primary/10 text-primary' : 'bg-error-container/30 text-error' }}" role="status" data-keep>
                         <span class="material-symbols-outlined">{{ $test['ok'] ? 'task_alt' : 'error' }}</span>
                         <span class="font-body-md text-body-md">{{ $test['message'] }}</span>
                     </div>

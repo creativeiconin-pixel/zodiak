@@ -17,11 +17,11 @@
     </div>
 
     {{-- Status chips --}}
-    <div class="relative z-10 flex flex-wrap gap-2 mb-space-md">
-        <a href="{{ route('orders.index', array_filter(['q' => $filters['q'], 'payment' => $filters['payment']])) }}" class="px-3 py-1.5 rounded-full font-label-md text-label-md {{ $filters['status'] ? 'bg-surface-container text-on-surface-variant' : 'bg-primary text-on-primary' }}">All ({{ $statusCounts->sum() }})</a>
+    <div class="relative z-10 flex gap-2 mb-space-md overflow-x-auto pb-1 -mx-space-lg px-space-lg sm:mx-0 sm:px-0 sm:flex-wrap sm:overflow-visible">
+        <a href="{{ route('orders.index', array_filter(['q' => $filters['q'], 'payment' => $filters['payment']])) }}" class="shrink-0 px-3 py-1.5 rounded-full font-label-md text-label-md {{ $filters['status'] ? 'bg-surface-container text-on-surface-variant' : 'bg-primary text-on-primary' }}">All ({{ $statusCounts->sum() }})</a>
         @foreach (OrderStatus::cases() as $status)
             @if ($statusCounts[$status->value] ?? 0)
-                <a href="{{ route('orders.index', array_filter(['status' => $status->value, 'q' => $filters['q'], 'payment' => $filters['payment']])) }}" class="px-3 py-1.5 rounded-full font-label-md text-label-md {{ $filters['status'] === $status->value ? 'bg-primary text-on-primary' : 'bg-surface-container text-on-surface-variant hover:text-on-surface' }}">{{ $status->label() }} ({{ $statusCounts[$status->value] }})</a>
+                <a href="{{ route('orders.index', array_filter(['status' => $status->value, 'q' => $filters['q'], 'payment' => $filters['payment']])) }}" class="shrink-0 whitespace-nowrap px-3 py-1.5 rounded-full font-label-md text-label-md {{ $filters['status'] === $status->value ? 'bg-primary text-on-primary' : 'bg-surface-container text-on-surface-variant hover:text-on-surface' }}">{{ $status->label() }} ({{ $statusCounts[$status->value] }})</a>
             @endif
         @endforeach
     </div>
@@ -32,7 +32,7 @@
             <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">search</span>
             <input name="q" value="{{ $filters['q'] }}" type="search" placeholder="Order number, customer, phone or UTR..." class="w-full pl-9 pr-4 py-2.5 rounded-lg bg-surface-container text-on-surface placeholder:text-outline focus:outline-none focus:ring-1 focus:ring-secondary/50 font-body-md text-body-md">
         </div>
-        <select name="payment" onchange="this.form.submit()" class="px-3 py-2.5 rounded-lg bg-surface-container text-on-surface font-body-md text-body-md focus:outline-none focus:ring-1 focus:ring-secondary/50">
+        <select name="payment" data-autosubmit aria-label="Payment status" class="px-3 py-2.5 rounded-lg bg-surface-container text-on-surface font-body-md text-body-md focus:outline-none focus:ring-1 focus:ring-secondary/50">
             <option value="">Any payment</option>
             @foreach (PaymentStatus::cases() as $payment)
                 <option value="{{ $payment->value }}" @selected($filters['payment'] === $payment->value)>{{ ucfirst(str_replace('_', ' ', $payment->value)) }}</option>
@@ -40,8 +40,33 @@
         </select>
     </form>
 
-    <section class="relative z-10 p-space-lg rounded-2xl bg-surface-container-low shadow-xl">
-        <div class="w-full overflow-x-auto">
+    <section class="relative z-10 p-space-sm md:p-space-lg rounded-2xl bg-surface-container-low shadow-xl">
+        {{-- Phones: one card per order --}}
+        <div class="md:hidden divide-y divide-surface-container-high/50">
+            @forelse ($orders as $order)
+                <a href="{{ route('orders.show', $order) }}" class="flex gap-3 p-space-sm active:bg-surface-container/60 rounded-xl">
+                    <img src="{{ $order->remedy->image }}" alt="" class="w-12 h-12 rounded-lg object-cover shrink-0">
+                    <span class="flex-1 min-w-0">
+                        <span class="flex items-baseline justify-between gap-2">
+                            <span class="font-title-md text-body-md text-on-surface font-semibold whitespace-nowrap">#{{ $order->reference }}</span>
+                            <span class="font-title-md text-body-md text-on-surface font-semibold whitespace-nowrap">{{ $inr($order->amount) }}</span>
+                        </span>
+                        <span class="block font-body-sm text-body-sm text-on-surface-variant truncate">{{ $order->remedy->name }} • {{ $order->customer_name }}</span>
+                        @if ($order->payment_utr)
+                            <span class="block font-mono text-body-sm text-on-surface tracking-wide">UTR {{ $order->payment_utr }}</span>
+                        @endif
+                        <span class="mt-1 flex items-center justify-between gap-2">
+                            <span class="font-label-md text-label-md {{ $order->needsPaymentCheck() ? 'text-primary' : (in_array($order->status, [OrderStatus::Rejected, OrderStatus::PaymentFailed], true) ? 'text-error' : 'text-secondary') }}">{{ $order->adminStatusLabel() }}</span>
+                            <span class="font-label-sm text-label-sm text-outline whitespace-nowrap">{{ $order->created_at->timezone('Asia/Kolkata')->format('j M, H:i') }}</span>
+                        </span>
+                    </span>
+                </a>
+            @empty
+                <p class="py-space-xl text-center text-outline">No orders found.</p>
+            @endforelse
+        </div>
+
+        <div class="hidden md:block w-full overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-surface-container text-outline font-label-sm text-label-sm uppercase tracking-wider">
@@ -58,7 +83,7 @@
                     @forelse ($orders as $order)
                         <tr class="hover:bg-surface-container/60">
                             <td class="py-3 px-space-md">
-                                <a href="{{ route('orders.show', $order) }}" class="font-semibold hover:text-primary">#{{ $order->reference }}</a>
+                                <a href="{{ route('orders.show', $order) }}" class="font-semibold hover:text-primary whitespace-nowrap">#{{ $order->reference }}</a>
                                 <span class="block font-body-sm text-body-sm text-outline">{{ $order->created_at->timezone('Asia/Kolkata')->format('j M, H:i') }}</span>
                             </td>
                             <td class="py-3 px-space-md">

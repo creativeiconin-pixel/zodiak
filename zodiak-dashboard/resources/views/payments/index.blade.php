@@ -25,7 +25,7 @@
         <div class="relative z-10 mb-space-md px-space-md py-3 rounded-xl bg-error-container/30 text-error font-body-md text-body-md" role="alert">{{ $errors->first() }}</div>
     @endif
 
-    <div class="relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-gutter mb-space-lg">
+    <div class="op-stats relative z-10 grid grid-cols-3 gap-3 sm:gap-gutter mb-space-lg">
         @foreach ([['To verify now', $toVerify->count() + $rechargesToVerify->count(), 'pending_actions', 'text-error'], ['Waiting for customer to pay', $awaitingCount, 'hourglass_top', 'text-secondary'], ['Verified today', $inr($collectedToday), 'savings', 'text-primary']] as [$label, $value, $icon, $tone])
             <div class="p-space-lg rounded-xl bg-surface-container-low shadow-md">
                 <div class="flex items-center justify-between">
@@ -62,7 +62,7 @@
                         <span class="block font-body-sm text-body-sm text-outline">{{ $order->payment_submitted_at?->diffForHumans() }}</span>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
+                <div class="flex flex-wrap items-center gap-2">
                     <form method="POST" action="{{ route('orders.payment-verification.store', $order) }}">
                         @csrf
                         <input type="hidden" name="decision" value="verify">
@@ -70,10 +70,10 @@
                             <span class="material-symbols-outlined text-base">verified</span> Verify
                         </button>
                     </form>
-                    <form method="POST" action="{{ route('orders.payment-verification.store', $order) }}" class="flex items-center gap-1">
+                    <form method="POST" action="{{ route('orders.payment-verification.store', $order) }}" class="flex flex-1 sm:flex-none min-w-[15rem] items-center gap-1">
                         @csrf
                         <input type="hidden" name="decision" value="reject">
-                        <input name="note" required maxlength="200" placeholder="Reason (e.g. UTR not found)" class="w-48 px-3 py-2 rounded-lg bg-surface-container-lowest/80 text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:ring-1 focus:ring-error">
+                        <input name="note" required maxlength="200" placeholder="Reason (e.g. UTR not found)" class="flex-1 min-w-0 sm:flex-none sm:w-48 px-3 py-2 rounded-lg bg-surface-container-lowest/80 text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:ring-1 focus:ring-error">
                         <button type="submit" class="px-3 py-2 rounded-lg bg-error-container/40 text-error font-label-lg text-label-lg hover:bg-error-container/70">Reject</button>
                     </form>
                     @include('payments.partials.delete-button', ['action' => route('orders.destroy', $order), 'label' => '#'.$order->reference, 'compact' => true])
@@ -111,7 +111,7 @@
                         <span class="block font-body-sm text-body-sm text-outline">{{ $recharge->payment_submitted_at?->diffForHumans() }}</span>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
+                <div class="flex flex-wrap items-center gap-2">
                     <form method="POST" action="{{ route('credit-recharges.verification.store', $recharge) }}">
                         @csrf
                         <input type="hidden" name="decision" value="verify">
@@ -119,10 +119,10 @@
                             <span class="material-symbols-outlined text-base">verified</span> Verify &amp; add credits
                         </button>
                     </form>
-                    <form method="POST" action="{{ route('credit-recharges.verification.store', $recharge) }}" class="flex items-center gap-1">
+                    <form method="POST" action="{{ route('credit-recharges.verification.store', $recharge) }}" class="flex flex-1 sm:flex-none min-w-[15rem] items-center gap-1">
                         @csrf
                         <input type="hidden" name="decision" value="reject">
-                        <input name="note" required maxlength="200" placeholder="Reason (e.g. UTR not found)" class="w-48 px-3 py-2 rounded-lg bg-surface-container-lowest/80 text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:ring-1 focus:ring-error">
+                        <input name="note" required maxlength="200" placeholder="Reason (e.g. UTR not found)" class="flex-1 min-w-0 sm:flex-none sm:w-48 px-3 py-2 rounded-lg bg-surface-container-lowest/80 text-on-surface placeholder:text-outline font-body-sm text-body-sm focus:outline-none focus:ring-1 focus:ring-error">
                         <button type="submit" class="px-3 py-2 rounded-lg bg-error-container/40 text-error font-label-lg text-label-lg hover:bg-error-container/70">Reject</button>
                     </form>
                     @include('payments.partials.delete-button', ['action' => route('credit-recharges.destroy', $recharge), 'label' => '#'.$recharge->reference, 'compact' => true])

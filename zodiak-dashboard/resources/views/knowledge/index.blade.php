@@ -19,7 +19,7 @@
         </div>
     @endif
 
-    <div class="relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-gutter mb-space-lg">
+    <div class="op-stats relative z-10 grid grid-cols-3 gap-3 sm:gap-gutter mb-space-lg">
         @foreach ([['Products', $products->count(), 'inventory_2', 'text-primary'], ['Fully described', $complete, 'task_alt', 'text-secondary'], ['Need details', $products->count() - $complete, 'edit_note', $products->count() - $complete > 0 ? 'text-error' : 'text-primary']] as [$label, $value, $icon, $tone])
             <div class="p-space-lg rounded-xl bg-surface-container-low shadow-md">
                 <div class="flex items-center justify-between">

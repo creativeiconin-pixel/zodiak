@@ -33,7 +33,7 @@
         </div>
     @endif
 
-    <div class="relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-gutter mb-space-lg">
+    <div class="op-stats relative z-10 grid grid-cols-3 gap-3 sm:gap-gutter mb-space-lg">
         @foreach ([['All products', $totals['all'], 'inventory_2', 'text-primary'], ['Shown in app', $totals['active'], 'visibility', 'text-secondary'], ['Out of stock', $totals['out_of_stock'], 'production_quantity_limits', $totals['out_of_stock'] ? 'text-error' : 'text-primary']] as [$label, $value, $icon, $tone])
             <div class="p-space-lg rounded-xl bg-surface-container-low shadow-md">
                 <div class="flex items-center justify-between">

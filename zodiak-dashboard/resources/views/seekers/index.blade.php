@@ -20,7 +20,7 @@
         </form>
     </div>
 
-    <div class="relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-gutter mb-space-lg">
+    <div class="op-stats relative z-10 grid grid-cols-3 gap-3 sm:gap-gutter mb-space-lg">
         @foreach ([['Total users', $totals['all'], 'group', 'text-primary'], ['With birth chart', $totals['with_chart'], 'flare', 'text-secondary'], ['Joined this week', $totals['this_week'], 'trending_up', 'text-primary']] as [$label, $value, $icon, $tone])
             <div class="p-space-lg rounded-xl bg-surface-container-low shadow-md">
                 <div class="flex items-center justify-between">
@@ -32,8 +32,28 @@
         @endforeach
     </div>
 
-    <section class="relative z-10 p-space-lg rounded-2xl bg-surface-container-low shadow-xl">
-        <div class="w-full overflow-x-auto">
+    <section class="relative z-10 p-space-sm md:p-space-lg rounded-2xl bg-surface-container-low shadow-xl">
+        {{-- Phones: one card per user --}}
+        <div class="md:hidden divide-y divide-surface-container-high/50">
+            @forelse ($seekers as $seeker)
+                <a href="{{ route('seekers.show', $seeker) }}" class="flex items-center gap-3 p-space-sm rounded-xl active:bg-surface-container/60">
+                    <span class="w-10 h-10 rounded-full bg-secondary-container/60 text-secondary flex items-center justify-center font-label-md font-bold shrink-0">{{ Str::upper(Str::substr($seeker->name, 0, 1)) }}</span>
+                    <span class="flex-1 min-w-0">
+                        <span class="block font-title-md text-body-md text-on-surface font-semibold truncate">{{ $seeker->name }}</span>
+                        <span class="block font-body-sm text-body-sm text-outline truncate">{{ $seeker->phone ?? $seeker->email }} • {{ $seeker->created_at->diffForHumans(short: true) }}</span>
+                        <span class="block font-body-sm text-body-sm text-on-surface-variant">{{ $seeker->orders_count }} orders • {{ $seeker->questions_count }} questions • {{ $seeker->chart ? $seeker->chart['lagna'].' Lagna' : 'no chart' }}</span>
+                    </span>
+                    <span class="text-right shrink-0">
+                        <span class="block font-title-md text-body-md font-bold {{ $seeker->credits > 0 ? 'text-primary' : 'text-error' }}">{{ number_format($seeker->credits) }}</span>
+                        <span class="block font-label-sm text-label-sm text-outline">credits</span>
+                    </span>
+                </a>
+            @empty
+                <p class="py-space-xl text-center text-outline">{{ $search ? 'No users match this search.' : 'No one has signed up yet.' }}</p>
+            @endforelse
+        </div>
+
+        <div class="hidden md:block w-full overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-surface-container text-outline font-label-sm text-label-sm uppercase tracking-wider">

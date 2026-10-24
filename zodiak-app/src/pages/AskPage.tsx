@@ -26,6 +26,12 @@ const VOICE_PREF_KEY = "zodiak.voiceReplies";
 
 type LocalEntry = ChatEntry & { localAudioUrl?: string; answeredVoice?: boolean };
 
+/** Pandit Jii answers by voice only after two voice notes in a row, the same rule the server uses. */
+function twoVoiceNotesBefore(list: ChatEntry[], index: number): boolean {
+  const questions = list.slice(0, index).filter((entry) => entry.role === "user");
+  return questions.length >= 2 && questions.slice(-2).every((entry) => Boolean(entry.audio));
+}
+
 function readVoicePref(): boolean {
   try {
     return localStorage.getItem(VOICE_PREF_KEY) !== "off";
@@ -223,7 +229,7 @@ export default function AskPage() {
     if (!seeker) return;
     setHistoryLoading(true);
     api.askHistory()
-      .then((list) => setEntries(list.map((entry, i) => ({ ...entry, answeredVoice: entry.role === "assistant" && Boolean(list[i - 1]?.audio) }))))
+      .then((list) => setEntries(list.map((entry, i) => ({ ...entry, answeredVoice: entry.role === "assistant" && twoVoiceNotesBefore(list, i) }))))
       .catch(setHistoryError)
       .finally(() => setHistoryLoading(false));
   }, [seeker]);
@@ -259,12 +265,14 @@ export default function AskPage() {
       id: -Date.now(), role: "user", text: message || null, answer: null, is_flagged: false, review: null, created_at: new Date().toISOString(), localAudioUrl,
       audio: voice ? { url: localAudioUrl!, duration_ms: voice.durationMs, waveform: voice.waveform } : null,
     };
+    const lastQuestion = [...entries].reverse().find((entry) => entry.role === "user");
+    const voiceAnswer = Boolean(voice) && Boolean(lastQuestion?.audio);
     setEntries((list) => [...list, optimistic]);
     try {
       const { question: saved, data: reply, credits } = await api.ask(message, chart ? chartPayload(chart, !profile?.birth.time_unknown) : null, voice);
       if (typeof credits === "number") setCredits(credits);
-      setEntries((list) => [...list.filter((e) => e.id !== optimistic.id), { ...saved, localAudioUrl }, { ...reply, answeredVoice: Boolean(voice) }]);
-      if (voice && voiceReplies) setAutoPlayId(reply.id);
+      setEntries((list) => [...list.filter((e) => e.id !== optimistic.id), { ...saved, localAudioUrl }, { ...reply, answeredVoice: voiceAnswer }]);
+      if (voiceAnswer && voiceReplies) setAutoPlayId(reply.id);
     } catch (error) {
       if (error instanceof ApiError && error.noCredits) {
         setNoCredits({ cost: Number(error.body.cost) || 1 });
