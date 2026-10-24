@@ -38,7 +38,7 @@
     </div>
 
     {{-- Verification queue --}}
-    <section class="relative z-10 p-space-lg rounded-2xl bg-surface-container-low shadow-xl mb-gutter">
+    <section id="utrs" class="scroll-mt-20 relative z-10 p-space-lg rounded-2xl bg-surface-container-low shadow-xl mb-gutter">
         <h2 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-space-xs mb-space-md">
             <span class="material-symbols-outlined text-error">pending_actions</span> Check these UTRs
         </h2>
@@ -85,7 +85,7 @@
     </section>
 
     {{-- Credit recharge queue --}}
-    <section class="relative z-10 p-space-lg rounded-2xl bg-surface-container-low shadow-xl mb-gutter">
+    <section id="recharges" class="scroll-mt-20 relative z-10 p-space-lg rounded-2xl bg-surface-container-low shadow-xl mb-gutter">
         <h2 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-space-xs mb-space-md">
             <span class="material-symbols-outlined text-secondary">toll</span> Credit recharges to check
         </h2>
@@ -160,7 +160,7 @@
 
     {{-- Refunds to send --}}
     @if ($refundPending->isNotEmpty())
-        <section class="relative z-10 p-space-lg rounded-2xl bg-surface-container-low shadow-xl mb-gutter">
+        <section id="refunds" class="scroll-mt-20 relative z-10 p-space-lg rounded-2xl bg-surface-container-low shadow-xl mb-gutter">
             <h2 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-space-xs mb-space-md">
                 <span class="material-symbols-outlined text-secondary">currency_exchange</span> Refunds to send
             </h2>
@@ -180,7 +180,7 @@
 
     {{-- Not paid yet: started but no UTR sent --}}
     @if ($awaitingOrders->isNotEmpty() || $unpaidRecharges->isNotEmpty())
-        <details class="relative z-10 p-space-lg rounded-2xl bg-surface-container-low shadow-xl mb-gutter">
+        <details id="unpaid" class="scroll-mt-20 relative z-10 p-space-lg rounded-2xl bg-surface-container-low shadow-xl mb-gutter">
             <summary class="cursor-pointer font-headline-sm text-headline-sm text-on-surface flex items-center gap-space-xs">
                 <span class="material-symbols-outlined text-secondary">hourglass_top</span> Not paid yet ({{ $awaitingOrders->count() + $unpaidRecharges->count() }})
             </summary>
@@ -207,7 +207,7 @@
     @endif
 
     {{-- History --}}
-    <section class="relative z-10 p-space-lg rounded-2xl bg-surface-container-low shadow-xl">
+    <section id="history" class="scroll-mt-20 relative z-10 p-space-lg rounded-2xl bg-surface-container-low shadow-xl">
         <h2 class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-space-xs mb-space-md">
             <span class="material-symbols-outlined text-primary">history</span> Payment history
         </h2>

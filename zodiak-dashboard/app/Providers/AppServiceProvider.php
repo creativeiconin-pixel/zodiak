@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Actions\ApplyIntegrationSettings;
+use App\Enums\PaymentStatus;
 use App\Enums\RechargeStatus;
 use App\Models\ChatMessage;
 use App\Models\CreditRecharge;
@@ -34,11 +35,26 @@ class AppServiceProvider extends ServiceProvider
                 + CreditRecharge::where('status', RechargeStatus::VerificationPending)->count());
         });
 
-        // Everything waiting in the Pandit queue: remedy orders to approve, held suggestions and open sensitive chats
+        // Counts for the sidebar menu and its sub-menus
         View::composer('partials.op-header', function ($view): void {
-            $view->with('panditQueueCount', Order::awaitingReview()->count()
-                + ChatMessage::awaitingReview()->count()
-                + FlaggedChat::open()->count());
+            $counts = [
+                'approvals' => Order::awaitingReview()->count(),
+                'suggestions' => ChatMessage::awaitingReview()->count(),
+                'sensitive' => FlaggedChat::open()->count(),
+                'dispatch' => Order::inFulfilment()->count(),
+                'utrs' => Order::awaitingPaymentCheck()->count(),
+                'recharges' => CreditRecharge::where('status', RechargeStatus::VerificationPending)->count(),
+                'refunds' => Order::where('payment_status', PaymentStatus::RefundPending)->count(),
+                'unpaid' => Order::where('payment_status', PaymentStatus::AwaitingPayment)->count()
+                    + CreditRecharge::where('status', RechargeStatus::AwaitingPayment)->count(),
+            ];
+
+            $view->with([
+                'menuCounts' => $counts,
+                'orderStatusCounts' => Order::query()->selectRaw('status, count(*) as total')->groupBy('status')->pluck('total', 'status'),
+                // Everything waiting in the Pandit queue: remedy orders to approve, held suggestions and open sensitive chats
+                'panditQueueCount' => $counts['approvals'] + $counts['suggestions'] + $counts['sensitive'],
+            ]);
         });
     }
 }

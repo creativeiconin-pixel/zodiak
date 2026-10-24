@@ -101,3 +101,20 @@ document.querySelectorAll('[role=status]').forEach((message) => {
         setTimeout(() => message.remove(), 420);
     }, 5000);
 });
+
+// Sub-menu links jump to a part of a page: close the phone menu, and open the section if it folds
+document.addEventListener('click', (event) => {
+    if (event.target.closest('#op-drawer [data-op-menu-link]')) {
+        setDrawer(false);
+    }
+});
+
+function openTargetSection() {
+    const target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if (target instanceof HTMLDetailsElement) {
+        target.open = true;
+    }
+}
+
+openTargetSection();
+window.addEventListener('hashchange', openTargetSection);

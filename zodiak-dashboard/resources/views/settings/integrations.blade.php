@@ -37,7 +37,7 @@
 
         @foreach ($integrations as $slug => $integration)
             @php($test = session('connection_test'))
-            <section class="p-space-lg rounded-2xl bg-surface-container-low shadow-xl">
+            <section id="{{ $slug }}" class="scroll-mt-20 p-space-lg rounded-2xl bg-surface-container-low shadow-xl">
                 <div class="flex flex-wrap items-center justify-between gap-space-sm pb-space-md">
                     <div class="flex items-center gap-space-sm">
                         <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">

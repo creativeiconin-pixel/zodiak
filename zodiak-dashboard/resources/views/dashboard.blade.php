@@ -58,8 +58,8 @@
                 </form>
             </div>
 
-            {{-- Jump to a part of the queue --}}
-            <nav class="relative z-10 -mt-space-md mb-space-lg flex gap-2 overflow-x-auto pb-1" aria-label="Queue sections">
+            {{-- Jump to a part of the queue (phones; the sidebar has these on desktop) --}}
+            <nav class="lg:hidden relative z-10 -mt-space-md mb-space-lg flex gap-2 overflow-x-auto pb-1" aria-label="Queue sections">
                 @foreach ($navItems as [$href, $icon, $label, $count])
                     <a href="{{ $href }}" class="shrink-0 inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors font-label-lg text-label-lg">
                         <span class="material-symbols-outlined text-lg text-outline">{{ $icon }}</span> {{ $label }}

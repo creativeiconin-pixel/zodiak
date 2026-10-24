@@ -1,27 +1,62 @@
 {{-- Op-Center shell: a sidebar on desktop and a top bar with a slide-out menu on phones. Included by every admin page. --}}
 @use('Illuminate\Support\Str')
 @php
-    $sections = [
+    $count = fn (string $key): int => (int) ($menuCounts[$key] ?? 0);
+    $dashboard = route('dashboard');
+    $payments = route('payments.index');
+    $statusFilter = request()->routeIs('orders.index') ? request('status') : null;
+    $integrationNames = [
+        'gemini' => 'Gemini AI', 'anthropic' => 'Claude AI', 'agenticorg' => 'AgenticOrg', 'credits' => 'Credits & packs', 'mcp' => 'MCP server',
+        'upi' => 'UPI payments', 'elevenlabs' => 'Voice replies', 'pinelabs' => 'Pine Labs', 'msg91' => 'Phone OTP',
+    ];
+
+    $orderChildren = [['label' => 'All orders', 'url' => route('orders.index'), 'active' => request()->routeIs('orders.index') && ! $statusFilter]];
+    foreach (\App\Enums\OrderStatus::cases() as $status) {
+        if (($orderStatusCounts[$status->value] ?? 0) > 0 || $statusFilter === $status->value) {
+            $orderChildren[] = ['label' => $status->label(), 'url' => route('orders.index', ['status' => $status->value]), 'count' => (int) ($orderStatusCounts[$status->value] ?? 0), 'active' => $statusFilter === $status->value];
+        }
+    }
+
+    $menu = [
         'Daily work' => [
-            ['overview', 'Overview', 'monitoring', 'overview', null],
-            ['dashboard', 'Pandit queue', 'verified_user', 'dashboard', $panditQueueCount ?? 0],
-            ['payments.index', 'Payments', 'payments', 'payments.*', $paymentsToCheck ?? 0],
-            ['orders.index', 'Orders', 'receipt_long', 'orders.*', null],
+            ['label' => 'Overview', 'icon' => 'monitoring', 'url' => route('overview'), 'active' => request()->routeIs('overview'), 'count' => 0],
+            ['label' => 'Pandit queue', 'icon' => 'verified_user', 'url' => $dashboard, 'active' => request()->routeIs('dashboard'), 'count' => $panditQueueCount ?? 0, 'title' => ($panditQueueCount ?? 0).' waiting in the Pandit queue', 'children' => [
+                ['label' => 'Orders to approve', 'url' => $dashboard.'#approvals', 'count' => $count('approvals'), 'urgent' => true, 'active' => false],
+                ['label' => 'Suggestions to check', 'url' => $dashboard.'#suggestion-reviews', 'count' => $count('suggestions'), 'urgent' => true, 'active' => false],
+                ['label' => 'Sensitive chats', 'url' => $dashboard.'#sensitive-chats', 'count' => $count('sensitive'), 'urgent' => true, 'active' => false],
+                ['label' => 'Blessing & shipping', 'url' => $dashboard.'#dispatch', 'count' => $count('dispatch'), 'active' => false],
+                ['label' => 'Activity log', 'url' => $dashboard.'#audit-log', 'active' => false],
+            ]],
+            ['label' => 'Payments', 'icon' => 'payments', 'url' => $payments, 'active' => request()->routeIs('payments.*'), 'count' => $paymentsToCheck ?? 0, 'title' => ($paymentsToCheck ?? 0).' UTR '.Str::plural('payment', $paymentsToCheck ?? 0).' to check', 'children' => [
+                ['label' => 'UTRs to check', 'url' => $payments.'#utrs', 'count' => $count('utrs'), 'urgent' => true, 'active' => false],
+                ['label' => 'Credit recharges', 'url' => $payments.'#recharges', 'count' => $count('recharges'), 'urgent' => true, 'active' => false],
+                ['label' => 'Refunds to send', 'url' => $payments.'#refunds', 'count' => $count('refunds'), 'urgent' => true, 'active' => false],
+                ['label' => 'Not paid yet', 'url' => $payments.'#unpaid', 'count' => $count('unpaid'), 'active' => false],
+                ['label' => 'Payment history', 'url' => $payments.'#history', 'active' => false],
+            ]],
+            ['label' => 'Orders', 'icon' => 'receipt_long', 'url' => route('orders.index'), 'active' => request()->routeIs('orders.*'), 'count' => 0, 'children' => $orderChildren],
         ],
         'Shop' => [
-            ['products.index', 'Products', 'inventory_2', 'products.*', null],
-            ['knowledge.index', 'Pandit Jii knowledge', 'menu_book', 'knowledge.*', null],
+            ['label' => 'Products', 'icon' => 'inventory_2', 'url' => route('products.index'), 'active' => request()->routeIs('products.*'), 'count' => 0, 'children' => [
+                ['label' => 'All products', 'url' => route('products.index'), 'active' => request()->routeIs('products.index', 'products.edit')],
+                ['label' => 'Add a product', 'url' => route('products.create'), 'active' => request()->routeIs('products.create')],
+            ]],
+            ['label' => 'Pandit Jii knowledge', 'icon' => 'menu_book', 'url' => route('knowledge.index'), 'active' => request()->routeIs('knowledge.*'), 'count' => 0, 'children' => [
+                ['label' => 'Product knowledge', 'url' => route('knowledge.index'), 'active' => request()->routeIs('knowledge.index', 'knowledge.edit')],
+                ['label' => 'What Pandit Jii reads', 'url' => route('knowledge.index').'#guide', 'active' => false],
+            ]],
         ],
         'People' => [
-            ['seekers.index', 'Users', 'group', 'seekers.*', null],
+            ['label' => 'Users', 'icon' => 'group', 'url' => route('seekers.index'), 'active' => request()->routeIs('seekers.*'), 'count' => 0],
         ],
         'Settings' => [
-            ['settings.integrations.edit', 'Integrations & keys', 'settings', 'settings.*', null],
+            ['label' => 'Integrations & keys', 'icon' => 'settings', 'url' => route('settings.integrations.edit'), 'active' => request()->routeIs('settings.*'), 'count' => 0, 'children' => collect(config('integrations'))
+                ->map(fn (array $integration, string $slug) => ['label' => $integrationNames[$slug] ?? Str::before($integration['label'], ' ('), 'url' => route('settings.integrations.edit').'#'.$slug, 'active' => false])
+                ->values()->all()],
         ],
     ];
-    // Add an "is this the page we're on" flag to each link
-    $sections = array_map(fn (array $links) => array_map(fn (array $link) => [...$link, request()->routeIs($link[3])], $links), $sections);
-    $current = collect($sections)->flatten(1)->first(fn (array $link) => $link[5]);
+
+    $current = collect($menu)->flatten(1)->first(fn (array $item) => $item['active']);
     $user = auth()->user();
 @endphp
 
@@ -45,20 +80,7 @@
         </div>
     </form>
 
-    <nav class="flex-1 overflow-y-auto px-3 pb-4" aria-label="Op-Center">
-        @foreach ($sections as $heading => $links)
-            <p class="px-3 pt-4 pb-1.5 font-label-sm text-label-sm uppercase tracking-widest text-outline">{{ $heading }}</p>
-            @foreach ($links as [$name, $label, $icon, $pattern, $count, $active])
-                <a href="{{ route($name) }}" @if ($active) aria-current="page" @endif class="group flex items-center gap-3 px-3 py-2.5 rounded-xl font-label-lg text-label-lg transition-colors {{ $active ? 'bg-primary/15 text-primary' : 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface' }}">
-                    <span class="material-symbols-outlined text-xl {{ $active ? '' : 'text-outline group-hover:text-primary' }} transition-colors" @if ($active) style="font-variation-settings: 'FILL' 1;" @endif>{{ $icon }}</span>
-                    <span class="flex-1">{{ $label }}</span>
-                    @if ($count)
-                        <span class="min-w-6 h-6 px-1.5 rounded-full bg-primary text-on-primary font-label-sm text-label-sm font-bold flex items-center justify-center" title="{{ $name === 'payments.index' ? $count.' UTR '.Str::plural('payment', $count).' to check' : $count.' waiting in the Pandit queue' }}">{{ $count }}</span>
-                    @endif
-                </a>
-            @endforeach
-        @endforeach
-    </nav>
+    @include('partials.op-nav', ['menu' => $menu, 'touch' => false])
 
     <div class="p-3 shrink-0 border-t border-surface-container-high">
         <a href="/" target="_blank" rel="noopener" class="flex items-center gap-3 px-3 py-2 rounded-xl font-label-lg text-label-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors">
@@ -90,7 +112,7 @@
     </button>
     <a href="{{ route('overview') }}" class="flex items-center gap-2 min-w-0 flex-1">
         <img alt="" class="h-7 w-7 rounded-md object-cover shrink-0" src="/images/zodiak-logo.jpg">
-        <span class="font-title-md text-title-md text-on-surface font-semibold truncate">{{ $current[1] ?? 'Op-Center' }}</span>
+        <span class="font-title-md text-title-md text-on-surface font-semibold truncate">{{ $current['label'] ?? 'Op-Center' }}</span>
     </a>
     <a href="{{ route('payments.index') }}" aria-label="Payments to check" class="relative w-11 h-11 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-container">
         <span class="material-symbols-outlined">payments</span>
@@ -119,20 +141,7 @@
                 <input id="op-search-mobile" name="q" type="search" placeholder="Order, name, phone, UTR…" class="w-full pl-9 pr-3 py-2.5 rounded-lg bg-surface-container text-on-surface placeholder:text-outline font-body-md text-body-md focus:outline-none focus:ring-1 focus:ring-primary/60">
             </div>
         </form>
-        <nav class="flex-1 overflow-y-auto px-3 pb-4" aria-label="Op-Center">
-            @foreach ($sections as $heading => $links)
-                <p class="px-3 pt-4 pb-1.5 font-label-sm text-label-sm uppercase tracking-widest text-outline">{{ $heading }}</p>
-                @foreach ($links as [$name, $label, $icon, $pattern, $count, $active])
-                    <a href="{{ route($name) }}" @if ($active) aria-current="page" @endif class="flex items-center gap-3 px-3 py-3 rounded-xl font-label-lg text-label-lg {{ $active ? 'bg-primary/15 text-primary' : 'text-on-surface-variant active:bg-surface-container' }}">
-                        <span class="material-symbols-outlined text-xl {{ $active ? '' : 'text-outline' }}">{{ $icon }}</span>
-                        <span class="flex-1">{{ $label }}</span>
-                        @if ($count)
-                            <span class="min-w-6 h-6 px-1.5 rounded-full bg-primary text-on-primary font-label-sm text-label-sm font-bold flex items-center justify-center">{{ $count }}</span>
-                        @endif
-                    </a>
-                @endforeach
-            @endforeach
-        </nav>
+        @include('partials.op-nav', ['menu' => $menu, 'touch' => true])
         <div class="p-3 border-t border-surface-container-high flex items-center gap-2">
             <a href="/" target="_blank" rel="noopener" class="flex-1 flex items-center gap-2 px-3 py-2.5 rounded-xl font-label-lg text-label-lg text-on-surface-variant active:bg-surface-container">
                 <span class="material-symbols-outlined text-xl text-outline">open_in_new</span> Open the app
